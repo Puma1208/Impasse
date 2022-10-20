@@ -27,8 +27,11 @@ public class BlackChecker extends Checker{
         // Notify if got to last row
         if(canCrown()){
             System.out.println("can crown the checker at " + position.getID());
-            crown();
+//            doCrown(cell);
+            this.board.notifyToCrown(this);
+
         }
+
     }
     public boolean canSlide(Cell goal){
         // Get next checker on diagonal
@@ -57,9 +60,11 @@ public class BlackChecker extends Checker{
             this.position.setUnoccupied();
             this.position.setOccupation(this.stack.bottomChecker);
             this.stack.bottomChecker.removeFromStack();
-            StackCheckers stackAfterTranspose = new StackCheckers(board, cell.getOccupying(), this);
+            StackCheckers stackAfterTranspose = new StackCheckers(board, cell.getOccupying(), this, cell);
             this.player.addStack(stackAfterTranspose);
-
+            if(stackAfterTranspose.canBearOff()){
+                stackAfterTranspose.doBearOff();
+            }
         }
         else{
             System.out.println("Can't transpose from " + this.position.getID() + " to " + cell.getID());
@@ -82,10 +87,18 @@ public class BlackChecker extends Checker{
     }
 
     // ------------------------------------------- crowning
+    @Override
+    public boolean canCrown(){
+        return this.position.row==1 && this.stack==null;
+    }
+    // Checker that is crowning toCrown
 //    @Override
-//    public boolean canCrown(){
-//        return this.position.row==1 && this.stack==null;
+//    public void doCrown(Cell toCrown){
+//        StackCheckers stack = new StackCheckers(board, this.player.checkersToCrown.get(0), this);
+//        this.player.stacks.add(stack);
+//        this.player.checkersToCrown.remove(0);
 //    }
+
 //
 //    @Override
 //    public void crown(){

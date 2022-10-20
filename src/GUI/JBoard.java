@@ -71,38 +71,57 @@ public class JBoard extends JPanel {
 
     public void cellNotifying(JCell jCell){
         Cell cell = jCell.getCell();
-        if(cell.isOccupied()){
-            // Stack selected
-            if(cell.getOccupyingStack()!=null){
-                from = cell;
-                stackSelected = cell.getOccupyingStack();
-                System.out.println("Selecting stack at "+ cell.getID() + ">" + stackSelected.getBottomChecker().getPosition().getID() + "***" +
-                        stackSelected.getTopChecker().getPosition().getID());
-
-            }
-            // Checker selected
-            else if(cell.getOccupying()!=null) {
-                // Stack chosen before current checker
-                if(stackSelected!=null
-                        && stackSelected.getTopChecker().canTranspose(cell)
-                        && stackSelected.getColor().equals(cell.getOccupying().getColor())){
-                    // Transpose
-                    updateTranspose(cell);
-                    stackSelected = null;
-                }
-                else{
-                    // just select the checker
-                    System.out.println("Selecting checker at " + cell.getID());
+        if(board.justBearOff){
+            from=null;
+            board.justBearOff = false;
+        }else{
+            if(cell.isOccupied()){
+                // Stack selected
+                if(cell.getOccupyingStack()!=null){
                     from = cell;
+                    stackSelected = cell.getOccupyingStack();
+                    System.out.println("Selecting stack at "+ cell.getID() + ">" + stackSelected.getBottomChecker().getPosition().getID() + "***" +
+                            stackSelected.getTopChecker().getPosition().getID());
+
+                }
+                // Checker selected
+                else if(cell.getOccupying()!=null) {
+                    // Stack chosen before current checker
+                    if(stackSelected!=null
+                            && stackSelected.getTopChecker().canTranspose(cell)
+                            && stackSelected.getColor().equals(cell.getOccupying().getColor())){
+                        // Transpose
+                        updateTranspose(cell);
+                        stackSelected = null;
+                        from=null;
+                    }
+                    else{
+                        // just select the checker
+                        // Check if need to crown with current and can crown with current
+                        if(cell.getOccupying().getPlayer().checkersToCrown.size()>0
+                                && !cell.getOccupying().getPlayer().checkersToCrown.contains(cell.getOccupying())){
+                            if(cell.getOccupying().canBeCrowning()){
+//                            from = cell;
+                                updateCrowning(cell);
+                                from=null;
+                            }
+                        }
+                        else{
+                            System.out.println("Selecting checker at " + cell.getID());
+                            from = cell;
+                        }
+
+                    }
                 }
             }
-        }
-        else if(from!=null){
+            else if(from!=null){
 //            System.out.println("Sliding element");
-            updateSliding(cell);
-            this.from = null;
-            this.stackSelected = null;
+                updateSliding(cell);
+                this.from = null;
+                this.stackSelected = null;
+            }
         }
+
 //        System.out.println("current board ");
 //        for(Cell[] row: board.getCells()){
 //            for(Cell c:row){
@@ -127,6 +146,11 @@ public class JBoard extends JPanel {
         if(stackSelected.getTopChecker().canTranspose(to)){
             from.getOccupyingStack().getTopChecker().doTranspose(to);
         }
+    }
+    public void updateCrowning(Cell from){
+//        cell.
+        from.getOccupying().doCrown();//this.from.getOccupying().getPlayer().checkersToCrown.get(0).getPosition());
+
     }
 
 

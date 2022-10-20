@@ -34,7 +34,10 @@ public class WhiteChecker extends Checker{
                     " for player " + color);
         }
         if(canCrown()){
-
+            this.board.notifyToCrown(this);
+//            if(canBearOff()){
+//
+//            }
         }
     }
     public boolean canSlide(Cell goal) {
@@ -60,13 +63,14 @@ public class WhiteChecker extends Checker{
             this.position.setUnoccupied();
             this.position.setOccupation(this.stack.bottomChecker);
             this.stack.bottomChecker.removeFromStack();
-            StackCheckers stackAfterTranspose = new StackCheckers(board, cell.getOccupying(), this);
- 
+            StackCheckers stackAfterTranspose = new StackCheckers(board, cell.getOccupying(), this, cell);
             this.player.addStack(stackAfterTranspose);
+            if(stackAfterTranspose.canBearOff()){
+                stackAfterTranspose.doBearOff();
+            }
         }
         else{
             System.out.println("Can't transpose from " + this.position.getID() + " to " + cell.getID());
-
         }
     }
     // Only using when current is the top checker
@@ -82,15 +86,19 @@ public class WhiteChecker extends Checker{
         return false;
     }
 
-
-
-
+    @Override
+    public boolean canCrown(){
+        // Put a single checker on the current -> create stack where this is the bottom
+        // Can also occur NOW no possible crown but LATER on if single still on furthest row
+        // must immediately stack the new single onto the first row single while still turn
+        return this.position.row==board.getSize() && this.stack==null;
+    }
+    // Checker that is crowning toCrown
 //    @Override
-//    public boolean canCrown(){
-//        // Put a single checker on the current -> create stack where this is the bottom
-//        // Can also occur NOW no possible crown but LATER on if single still on furthest row
-//        // must immediately stack the new single onto the first row single while still turn
-//        return this.position.row==board.getSize() && this.stack==null;
+//    public void doCrown(Cell toCrown){
+//        StackCheckers stack = new StackCheckers(board, this.player.checkersToCrown.get(0), this);
+//        this.player.stacks.add(stack);
+//        this.player.checkersToCrown.remove(0);
 //    }
 //    @Override
 //    public void crown(){

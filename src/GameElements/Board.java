@@ -14,6 +14,7 @@ public class Board {
     private ArrayList<StackCheckers> stacksBlack = new ArrayList<>();
 
     static GamePlay gamePlay;
+    public boolean justBearOff=false;
 
     public Board(int size){
 
@@ -82,7 +83,7 @@ public class Board {
             }
             this.checkers[player.getPlayerIndex()][index][1] = topChecker;
             StackCheckers stack = new StackCheckers(this, checker, topChecker);
-            this.players[player.getPlayerIndex()].addStack(stack);
+            this.players[player.getPlayerIndex()].stacks.add(stack);
         }
         else{
             this.players[player.getPlayerIndex()].addChecker(checker);
@@ -127,4 +128,13 @@ public class Board {
         return cells[updateColumn][updateRow];
     }
 
+    public void notifyToCrown(Checker checker) {
+        checker.getPlayer().checkersToCrown.add(checker);
+    }
+
+    public void notifyToBearOff(StackCheckers stack) {
+        stack.position.removeCurrentStack();
+        stack.player.removeTopCheckerFromBoard(stack);
+        justBearOff = true;
+    }
 }

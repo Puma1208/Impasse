@@ -16,7 +16,8 @@ public class StackCheckers implements Piece{
         if(bottomChecker.getPlayer().equals(topChecker.getPlayer())){
             this.board = board;
             this.player = bottomChecker.getPlayer();
-            this.player.addStack(this);
+            System.out.println("setting player " + player.getPlayerIndex());
+//            this.player.addStack(this);
             this.bottomChecker = bottomChecker;
             this.topChecker = topChecker;
             this.position = cell;
@@ -25,6 +26,7 @@ public class StackCheckers implements Piece{
             this.color = bottomChecker.getColor();
             setPosition(position);
         }
+
     }
 
     public StackCheckers(Board board, Checker bottomChecker, Checker topChecker){
@@ -75,6 +77,9 @@ public class StackCheckers implements Piece{
         }else{
             System.out.println("Stack can't go from cell " + position.getID() + " to cell " + cell.getID() +
                     " for player " + color);
+        }
+        if(canBearOff()){
+            this.doBearOff();
         }
     }
 
@@ -132,6 +137,24 @@ public class StackCheckers implements Piece{
                 return (current.equals(goal)) && !current.isOccupied();
             }
             return noCheckerBetween(board.getCell(current.row+1, Checker.updateCol(current.column, goal.column)), goal);
+        }
+    }
+
+    public void doBearOff(){
+        this.board.notifyToBearOff(this);
+    }
+
+    public boolean canBearOff(){
+        // Index = 0 -> white player
+        if(this.player.getPlayerIndex()==0){
+            return this.position.row==1;
+        }
+        return this.position.row==board.getSize();
+    }
+
+    public void setPlayer(Player player) {
+        if(this.player==null){
+            this.player = player;
         }
     }
 

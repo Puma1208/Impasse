@@ -54,10 +54,11 @@ public class JCell extends JPanel implements MouseListener {
                 g.drawOval(space/2, space/2, getUnitSize()-space, getUnitSize()-space);
                 g.fillOval(space/2, space/2, getUnitSize()-space, getUnitSize()-space);
 
-//                if(cell.toCrown()){
-//                    g.setColor(Color.orange);
-//                    g.fillOval(3*space, 3*space, getUnitSize()-6*space, getUnitSize()-6*space);
-//                }
+                if(cell.getOccupying().getPlayer().checkersToCrown.size()>0
+                        && !cell.getOccupying().getPlayer().checkersToCrown.contains(cell.getOccupying())){
+                    g.setColor(Color.orange);
+                    g.fillOval(3*space, 3*space, getUnitSize()-6*space, getUnitSize()-6*space);
+                }
             }
 
         }

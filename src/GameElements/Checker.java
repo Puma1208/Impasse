@@ -38,10 +38,10 @@ public abstract class Checker {//implements Piece{
         }
         this.position = cell;
         this.position.setOccupation(this);
-        if(canCrown){
-            System.out.println("can crown the checker at " + position.getID());
-            crown();
-        }
+//        if(canCrown){
+//            System.out.println("can crown the checker at " + position.getID());
+//            doCrown(cell);
+//        }
     }
     public boolean areSameColor(Checker checker){   return this.getColor()==checker.getColor(); }
 
@@ -62,7 +62,9 @@ public abstract class Checker {//implements Piece{
     public boolean canCrown(){
         return false;
     }
-
+    public boolean canBeCrowning(){
+        return this.stack==null && !this.player.checkersToCrown.contains(this);
+    }
 
 
 
@@ -130,12 +132,15 @@ public abstract class Checker {//implements Piece{
 
 
 
-    public void crown(){
+    public void doCrown(){
+        this.position.setUnoccupied();
+        StackCheckers stack = new StackCheckers(board, this.player.checkersToCrown.get(0), this,
+                this.player.checkersToCrown.get(0).getPosition());
+        this.player.addStack(stack);
+        this.player.checkersToCrown.remove(0);
 
     }
-    public void bearOff(){
 
-    }
     public void impasse(){
 
     }

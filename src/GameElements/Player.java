@@ -37,7 +37,6 @@ public class Player {
     }
     public void removeTopCheckerFromBoard(StackCheckers stack){
         removeChecker(stack.topChecker);
-
         this.stacks.remove(stack);
     }
     public void addChecker(Checker checker){
@@ -45,6 +44,7 @@ public class Player {
     }
     public void addStack(StackCheckers stack){
         this.stacks.add(stack);
+        stack.setPlayer(this);
     }
     public void removeStack(StackCheckers stack) { this.stacks.remove(stack);}
     public void checkerOffBoard(Checker checker){
