@@ -7,9 +7,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 
-import java.util.Arrays;
-import java.util.Random;
-
 public class GamePanel extends JPanel implements MouseListener {
 
     static final int SCREEN_WIDTH = 500;

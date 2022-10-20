@@ -55,25 +55,14 @@ public class WhiteChecker extends Checker{
     }
     @Override
     public void doTranspose(Cell cell){
-//        System.out.println("Transposing for checker");
-
         if(canTranspose(cell)){
             this.player.removeStack(this.stack);
-
-
             this.position.setUnoccupied();
             this.position.setOccupation(this.stack.bottomChecker);
-//            this.position.removeCurrentStack();
             this.stack.bottomChecker.removeFromStack();
-//            this.stack.bottomChecker.stack = null;
-
-//            this.position = cell;
             StackCheckers stackAfterTranspose = new StackCheckers(board, cell.getOccupying(), this);
  
             this.player.addStack(stackAfterTranspose);
-//            cell.setOccupation(this);
-//            this.stack = null;
-//            System.out.println("RESULT OF TRANSPOSE " + );
         }
         else{
             System.out.println("Can't transpose from " + this.position.getID() + " to " + cell.getID());
@@ -89,7 +78,7 @@ public class WhiteChecker extends Checker{
             return (position.row-cell.row==Math.abs(position.column-cell.column))
                     && (position.row-cell.row==1);
         }
-        System.out.println("Current is not the top checker of a stack");
+        System.out.println("Current is not the top checker of a stack or not the selected stack is not of the same player");
         return false;
     }
 

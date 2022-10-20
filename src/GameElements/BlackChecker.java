@@ -52,23 +52,14 @@ public class BlackChecker extends Checker{
 
     @Override
     public void doTranspose(Cell cell){
-//        System.out.println("Transposing from " + this.position.getID() + " to " + cell.getID());
         if(canTranspose(cell)){
             this.player.removeStack(this.stack);
-
-
             this.position.setUnoccupied();
             this.position.setOccupation(this.stack.bottomChecker);
-//            this.position.removeCurrentStack();
             this.stack.bottomChecker.removeFromStack();
-//            this.stack.bottomChecker.stack = null;
             StackCheckers stackAfterTranspose = new StackCheckers(board, cell.getOccupying(), this);
-//            cell.setOccupyingStack(stackAfterTranspose);
             this.player.addStack(stackAfterTranspose);
-//            this.board.
-//            this.stack.removeFromBoard();
-//            this.position = cell;
-//            this.stack = null;
+
         }
         else{
             System.out.println("Can't transpose from " + this.position.getID() + " to " + cell.getID());

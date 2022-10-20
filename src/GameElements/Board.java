@@ -57,15 +57,12 @@ public class Board {
         return size - row%2 - toSubtract;
     }
 
-    // Hard-coded for the normal impasse game
-    // TODO: create the double checkers on the opposite side for both players
     public void initialiseCheckers(){
         // in terms of indexes NOT IN TERMS OF COLS AND ROWS
         for(int i=0; i<size; i++){
             Checker white = new WhiteChecker(this.players[0], this.cells[i][whiteCol(i+1)-1], this);
             Checker black = new BlackChecker(this.players[1], this.cells[i][blackCol(i+1)-1], this);
             // create stack if needed and add to checkers
-
             initialisePlayingPiece(white, white.getPlayer(), i);
             initialisePlayingPiece(black, black.getPlayer(), i);
         }

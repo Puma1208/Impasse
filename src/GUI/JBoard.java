@@ -95,34 +95,6 @@ public class JBoard extends JPanel {
                     System.out.println("Selecting checker at " + cell.getID());
                     from = cell;
                 }
-
-//                if (stackSelected != null) {
-//                    // Possibly transpose
-//                    if (stackSelected.getColor().equals(cell.getOccupying().getColor())) {
-//                        // Check if can transpose
-//                        System.out.println("Eventually transposing to " + cell.getID());
-//                        updateTranspose(cell);
-//                        stackSelected = null;
-//                        from=null;
-//                    }
-//                    else{
-//                        from=null;
-//                        stackSelected=null;
-//                    }
-////                    } else {
-//////                        System.out.println("not transposing from " + from.getID() + " to " + cell.getID());
-//////                        from = null;
-////                        System.out.println("Re-selecting an other -> Checker at " + cell.getID());
-////                        from = cell;
-////                        stackSelected = null;
-////
-////                    }
-//                } else {
-//                    // Not transpose - just select cell
-//                    System.out.println("Re-selecting an other -> Checker at " + cell.getID());
-//                    from = cell;
-//                    stackSelected = null;
-//                }
             }
         }
         else if(from!=null){
@@ -153,65 +125,9 @@ public class JBoard extends JPanel {
     public void updateTranspose(Cell to){
         System.out.println("Willing to transpose " + stackSelected.getPosition().getID() + " to " + to.getID() + ">" + stackSelected.getTopChecker().canTranspose(to));
         if(stackSelected.getTopChecker().canTranspose(to)){
-            System.out.println("checker " + stackSelected.getTopChecker().getColor() + "*****" + stackSelected.getTopChecker().getClass().toGenericString());
             from.getOccupyingStack().getTopChecker().doTranspose(to);
         }
     }
-
-
-//    public void cellNotifying(JCell jCell){
-//        Cell cell = jCell.getCell();
-//
-//        // Cell occupied
-//        //      by Stack -> selecting new stack
-//        //      by Checker -> selecting checker on which to transpose
-//        if(cell.isOccupied()){
-//            if(cell.getOccupyingStack()!=null){
-//                // Select stack for transpose
-//                stackSelected = cell.getOccupyingStack();
-//                System.out.println("Selecting stack " + cell.getID());
-//            }else{
-//                System.out.println("cell selected " + cell.getID() + (stackSelected!=null) + "-" + (cell.occupying!=null));
-//                to = jCell;
-//                if(stackSelected!=null && cell.occupying!=null){
-//                    updateTranspose(from, to);
-//                    stackSelected=null;
-//                }
-//                System.out.println("Selecting checker " + cell.getID());
-//            }
-//            from = jCell;
-//        }
-//        else{
-//            if(from!=null){
-//                to = jCell;
-//                System.out.println("Selecting cell " + to.getCell().getID());
-//                updateJBoard(from, to);
-//            }
-//        }
-//    }
-
-
-//    public void updateJBoard(JCell from, JCell to){
-//        Cell cellFrom = from.getCell();
-//        Cell cellTo = to.getCell();
-//        if(cellFrom.isOccupied()){
-//            if(cellFrom.getOccupyingStack()!=null){
-//                cellFrom.getOccupyingStack().doSlide(cellTo);
-//            }else if(cellFrom.getOccupying()!=null){
-//                cellFrom.getOccupying().doSlide(cellTo);
-//            }
-////            cellFrom.occupying.setPosition(cellTo);
-////            previousFrom = from;
-////            previousTo = to;
-//            // Draw arrow
-//        }
-//        this.from = null;
-//
-//    }
-
-
-
-
 
 
 

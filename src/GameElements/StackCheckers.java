@@ -38,7 +38,6 @@ public class StackCheckers implements Piece{
             this.position.setUnoccupied();
         }
         this.position = cell;
-//        this.topChecker.setPosition(cell);
         this.bottomChecker.setPosition(cell);
         this.topChecker.position = position;
         this.position.setOccupyingStack(this);

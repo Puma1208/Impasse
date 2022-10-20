@@ -66,10 +66,6 @@ public class Cell {
             this.occupyingStack = null;
         }else{
             this.occupied = true;
-            System.out.println("Stack at " + this.getID() + " has ");
-            System.out.print(" top=" + stack.getTopChecker());
-            System.out.print(" bottom=" + stack.getBottomChecker());
-            System.out.println();
             stack.getBottomChecker().position = this;
             stack.getTopChecker().position = this;
             this.occupyingStack = stack;
@@ -88,7 +84,6 @@ public class Cell {
     }
     public Checker getOccupying(){  return occupying;}
     public StackCheckers getOccupyingStack(){
-//        System.out.println("Cell " + id  + (occupying==null) + "-" + occupyingStack==null);
         return occupyingStack;
     }
     // Keep bottom checker on current cell and remove stack from current position

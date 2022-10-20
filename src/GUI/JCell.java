@@ -5,7 +5,6 @@ import GameElements.Cell;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -39,7 +38,6 @@ public class JCell extends JPanel implements MouseListener {
         setBackground(color);
         if(cell.isOccupied()){
             int space = getUnitSize()/9;
-//            System.out.println("cell " + cell.getID() + " checker " + (cell.getOccupying()!=null) + " or stack " + (cell.getOccupyingStack()!=null));
             if(cell.getOccupyingStack()!=null){
 
                 Color color = cell.getOccupyingStack().getBottomChecker().getColor();
@@ -83,16 +81,6 @@ public class JCell extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-//        // store the cell of the new position in Board - only after a checker was selected
-////        System.out.println("Jcell "+ cell.getID() +" clicked");
-////        jboard.cellNotifying(this);
-//        if(cell.isOccupied()){
-////            System.out.println("cell " + cell.getID() + " is occupied ");
-//            jboard.cellNotifying(this);
-//        }
-//        else{
-//            jboard.cellNotifying(this);
-//        }
         jboard.cellNotifying(this);
     }
 
