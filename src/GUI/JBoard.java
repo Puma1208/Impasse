@@ -1,8 +1,6 @@
 package GUI;
 
-import GameElements.Board;
-import GameElements.Cell;
-import GameElements.StackCheckers;
+import GameElements.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,8 +25,8 @@ public class JBoard extends JPanel {
     ArrayList<Cell> cellsToCrown = new ArrayList<>();
 
     public JBoard(int size){
-
-        this.board = new Board(size);
+        GamePlay gamePlay = new GamePlay(size, PlayerType.AI, PlayerType.AI);
+        this.board = gamePlay.board;
         this.cells = new JCell[size][size];
         this.unitSize = SCREEN_HEIGHT/(size+2);
 

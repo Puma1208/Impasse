@@ -25,23 +25,39 @@ public class WhiteChecker extends Checker{
 //    public void move(Cell cell){
 //
 //    }
+
+    @Override
+    public boolean canSlideToNextDiagonal(){
+        if(position.getRow()==board.getSize()){
+            return false;
+        }
+        if(position.getColumn()==board.getSize()){
+            return board.getCell(position.getRow()+1, position.getColumn()-1).isOccupied();
+        }
+        if(position.getColumn()==board.getSize()){
+            return board.getCell(position.getRow()+1, position.getColumn()+1).isOccupied();
+        }
+        return board.getCell(position.getRow()+1, position.getColumn()+1).isOccupied()
+                || board.getCell(position.getRow()+1, position.getColumn()-1).isOccupied();
+    }
     @Override
     public void doSlide(Cell cell){
+        System.out.println("sliding current to cell " + cell.getID());
         if(canSlide(cell)){
             setPosition(cell);
         }else{
             System.out.println("Can't go from cell " + position.getID() + " to cell " + cell.getID() +
                     " for player " + color);
         }
-        if(canCrown()){
-            this.board.notifyToCrown(this);
-//            if(canBearOff()){
-//
-//            }
-        }
+//        if(canCrown()){
+//            this.board.notifyToCrown(this);
+////            if(canBearOff()){
+////
+////            }
+//        }
     }
     public boolean canSlide(Cell goal) {
-        return onCorrectDiagonal(goal) && noCheckerBetween(board.getCell(position.row+1, updateCol(position.column, goal.column)), goal);
+        return this.position!=goal && onCorrectDiagonal(goal) && noCheckerBetween(board.getCell(position.row+1, updateCol(position.column, goal.column)), goal);
     }
     public boolean onCorrectDiagonal(Cell goal){
         return (goal.row-position.row == Math.abs(goal.column-position.column));
@@ -56,15 +72,29 @@ public class WhiteChecker extends Checker{
         }
         return noCheckerBetween(board.getCell(current.row+1, updateCol(current.column, goal.column)), goal);
     }
+
+
+
+    // Tranposing to the current checker
+    public void doTransposeOn(Checker checker){
+        doTranspose(checker.getPosition());
+    }
     @Override
     public void doTranspose(Cell cell){
         if(canTranspose(cell)){
             this.player.removeStack(this.stack);
             this.position.setUnoccupied();
-            this.position.setOccupation(this.stack.bottomChecker);
+//            this.position.setOccupation(this.stack.bottomChecker);
+            this.position.setOccupation(this);
             this.stack.bottomChecker.removeFromStack();
             StackCheckers stackAfterTranspose = new StackCheckers(board, cell.getOccupying(), this, cell);
             this.player.addStack(stackAfterTranspose);
+
+            // CAN CROWN
+            if(this.canCrown()){
+                this.canCrown = true;
+            }
+            // CAN BEAR OFF
             if(stackAfterTranspose.canBearOff()){
                 stackAfterTranspose.doBearOff();
             }
@@ -73,6 +103,8 @@ public class WhiteChecker extends Checker{
             System.out.println("Can't transpose from " + this.position.getID() + " to " + cell.getID());
         }
     }
+
+
     // Only using when current is the top checker
     @Override
     public boolean canTranspose(Cell cell){

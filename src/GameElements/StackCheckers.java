@@ -16,7 +16,7 @@ public class StackCheckers implements Piece{
         if(bottomChecker.getPlayer().equals(topChecker.getPlayer())){
             this.board = board;
             this.player = bottomChecker.getPlayer();
-            System.out.println("setting player " + player.getPlayerIndex());
+//            System.out.println("setting player " + player.getPlayerIndex());
 //            this.player.addStack(this);
             this.bottomChecker = bottomChecker;
             this.topChecker = topChecker;
@@ -41,7 +41,7 @@ public class StackCheckers implements Piece{
         }
         this.position = cell;
         this.bottomChecker.setPosition(cell);
-        this.topChecker.position = position;
+//        this.topChecker.position = position;
         this.position.setOccupyingStack(this);
     }
     public void updatePos(){
@@ -141,7 +141,8 @@ public class StackCheckers implements Piece{
     }
 
     public void doBearOff(){
-        this.board.notifyToBearOff(this);
+        this.position.removeCurrentStack();
+//        this.board.notifyToBearOff(this);
     }
 
     public boolean canBearOff(){
@@ -158,7 +159,48 @@ public class StackCheckers implements Piece{
         }
     }
 
+    public void doImpasse(){
+        if(canImpasse()){
+            this.player.removeChecker(topChecker);
+            this.position.setOccupation(this.bottomChecker);
+            this.player.removeStack(this);
+        }
+    }
+    // Checks only if both checkers are not null NOT IF OTHER MOVES ARE NOT AVAILABLE
+    public boolean canImpasse(){
+        return this.bottomChecker!=null && this.topChecker!=null;
+    }
 
+    public boolean canSlideToNextDiagonal(){
+        // WHITE
+        if(this.player.getPlayerIndex()==0) {
+            if(position.getRow()==board.getSize()){
+                return false;
+            }
+            if(position.getColumn()==board.getSize()){
+                return board.getCell(position.getRow()+1, position.getColumn()-1).isOccupied();
+            }
+            if(position.getColumn()==board.getSize()){
+                return board.getCell(position.getRow()+1, position.getColumn()+1).isOccupied();
+            }
+            return board.getCell(position.getRow()+1, position.getColumn()+1).isOccupied()
+                    || board.getCell(position.getRow()+1, position.getColumn()-1).isOccupied();
+
+        }
+        else
+        if (position.getRow() == 1) {
+            return false;
+        }
+        if (position.getColumn() == board.getSize()) {
+            return !board.getCell(position.getRow() - 1, position.getColumn() - 1).isOccupied();
+        }
+        if (position.getColumn() == board.getSize()) {
+            return !board.getCell(position.getRow() - 1, position.getColumn() + 1).isOccupied();
+        }
+        return !board.getCell(position.getRow() - 1, position.getColumn() + 1).isOccupied()
+                || !board.getCell(position.getRow() - 1, position.getColumn() - 1).isOccupied();
+
+    }
 //    public boolean canTranpose(Cell cell){
 //        if(cell.getOccupying()!= null
 //                && cell.getOccupyingStack()==null

@@ -1,5 +1,6 @@
 package GameElements;
 import java.awt.Color;
+import java.util.ArrayList;
 
 public class Cell {
     static final char[] alphabet = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
@@ -112,5 +113,14 @@ public class Cell {
     public boolean toCrown(){
         return needToCrown;
     }
+
+//    public void getAvailableSlide(Checker checker){
+//        ArrayList<Cell> canSlide = new ArrayList<>();
+//        if(checker.getColor()==Color.BLACK){
+//            int row;
+//            for()
+//        }
+//    }
+
 
 }

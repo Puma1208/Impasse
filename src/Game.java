@@ -1,4 +1,3 @@
-import GUI.GamePanel;
 import GameElements.Board;
 
 public class Game {

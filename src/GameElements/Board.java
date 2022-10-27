@@ -2,9 +2,10 @@ package GameElements;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Board {
-//    static final char[] LETTERS = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+    static final char[] LETTERS = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     private final Cell[][] cells;
     static int size;
     // Need to fill in?
@@ -14,18 +15,21 @@ public class Board {
     private ArrayList<StackCheckers> stacksBlack = new ArrayList<>();
 
     static GamePlay gamePlay;
+    static GameState gameState;
     public boolean justBearOff=false;
 
-    public Board(int size){
-
+    public Board(GamePlay gp, int size, PlayerType type1, PlayerType type2){
+        this.gamePlay = gp;
+        gamePlay.addState(new GameState(this, gp.currentPlayer));
+        this.gameState = gamePlay.gameStates.get(gamePlay.gameStates.size()-1);
         this.size = size;
         this.cells = initialiseBoard(size);
-        this.players = new Player[]{new Player(Color.WHITE), new Player(Color.BLACK)};
+        this.players = new Player[]{new Player(type1, Color.WHITE), new Player(type2, Color.BLACK)};
         // TODO method to update position
         this.checkers = new Checker[2][size][2]; // + (int)Math.ceil(size/2)];
         initialiseCheckers();
 
-        gamePlay = new GamePlay(new GameState(this));
+//        gamePlay = new GamePlay(new GameState(this));
     }
 
     private Cell[][] initialiseBoard(int size){
@@ -111,6 +115,7 @@ public class Board {
     public int getSize(){   return this.size; }
     // Get a cell from its row and column - not indexes
     public Cell getCell(int row, int column){
+//        System.out.println("row=" + row + "col=" + column) ;
         int updateRow = row-1;
         int updateColumn = column - 1;
         if(row<0){
@@ -125,9 +130,20 @@ public class Board {
         if(column>7){
             updateColumn = 7;
         }
+//        System.out.println("uRow=" + updateRow + "uCol=" + updateColumn + ">>>>" + cells[updateColumn][updateRow].getID()) ;
+
         return cells[updateColumn][updateRow];
     }
+    public Cell getCell(int row, char col){
+        return getCell(row, stringColToIndex(col));
+    }
+    public int stringColToIndex(char col){
+        if(Arrays.asList(LETTERS).contains(col)){
+            return Arrays.asList(LETTERS).indexOf(col);
+        }
+        return -1;
 
+    }
     public void notifyToCrown(Checker checker) {
         checker.getPlayer().checkersToCrown.add(checker);
     }
@@ -136,5 +152,27 @@ public class Board {
         stack.position.removeCurrentStack();
         stack.player.removeTopCheckerFromBoard(stack);
         justBearOff = true;
+    }
+
+    public void slide(Cell from, Cell to){
+        System.out.println("so we're sliding " + from.getID() + ">"+ to.getID());
+
+        if(from.isOccupied()){
+
+            if(from.getOccupyingStack()!=null){
+                System.out.println("Stack chosen");
+                if(from.getOccupyingStack().getPlayer().getPlayerIndex()!=this.gameState.current.getPlayerIndex()){
+                    System.out.println("this player is not allowed to move the current stack");
+                }else{ from.getOccupyingStack().doSlide(to);}
+
+            }else if(from.getOccupying()!=null){
+                System.out.println("Checker chosen");
+
+                if(from.getOccupying().getPlayer().getPlayerIndex()!=this.gameState.current.getPlayerIndex()){
+                    System.out.println("this player is not allowed to move the current stack");
+                }else{ from.getOccupying().doSlide(to);}
+
+            }
+        }
     }
 }

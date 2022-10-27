@@ -1,4 +1,6 @@
 package GameElements;
+import com.sun.jdi.StackFrame;
+
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -6,6 +8,7 @@ import java.util.ArrayList;
 public class Player {
     //White, Black;
 
+    PlayerType type;
     int score = 0;
     Color color;
     // Among checkers that are in the stacks -> consider only stack to move and not individual checkers
@@ -17,7 +20,8 @@ public class Player {
     private final int playerIndex;
 
 
-    public Player(Color color){
+    public Player(PlayerType type, Color color){
+        this.type = type;
         this.color = color;
         this.shouldCrown = false;
         playerIndex = indexFromColor();
@@ -47,6 +51,70 @@ public class Player {
         stack.setPlayer(this);
     }
     public void removeStack(StackCheckers stack) { this.stacks.remove(stack);}
+
+
+    /*
+        The Basic Moves + Impasse
+     */
+    public void slide(Checker checker, Cell to){
+        // Check if checker belongs to player
+        if(checker.getPlayer().equals(this)){
+            checker.doSlide(to);
+            if(checker.canCrown()){
+                // To implement
+                checker.doCrown();
+            }
+        }else{
+            System.out.println("The checker doesn't belong to the current player");
+        }
+    }
+    public void slide(StackCheckers stack, Cell to){
+        // Check if stack belongs to player
+        if(stack.getPlayer().equals(this)){
+            stack.doSlide(to);
+            if(stack.canBearOff()){
+                stack.doBearOff();
+                this.stacks.remove(stack);
+            }
+        }else{
+            System.out.println("The checker doesn't belong to the current player");
+        }
+
+    }
+    public void transpose(StackCheckers stack, Checker checker){
+        // Check if stack and checker belongs to player
+        if(stack.getPlayer().equals(this) && checker.getPlayer().equals(this)
+                && stack.topChecker.canTransposeOn(checker)){
+            stack.getTopChecker().doTransposeOn(checker);
+        }else{
+            System.out.println("The checker or/and the stack doesn't belong to the current player");
+        }
+
+    }
+    public void impasse(Checker checker){
+        // Check if checker belongs to player
+        if(checker.getPlayer().equals(this)){
+            // Check if can do, or should do impasse
+            checker.doImpasse();
+        }else{
+            System.out.println("The checker doesn't belong to the current player");
+        }
+
+    }
+    public void impasse(StackCheckers stack){
+        // Check if stack belongs to player
+        if(stack.getPlayer().equals(this)){
+            stack.topChecker.doImpasse();
+        }else{
+            System.out.println("The stack doesn't belong to the current player");
+        }
+
+    }
+
+    /*
+            Bear-off
+            Crown
+     */
     public void checkerOffBoard(Checker checker){
         this.playingCheckers.remove(checker);
     }
@@ -74,8 +142,8 @@ public class Player {
     }
     public void crowning(Cell cellToCrown, Checker checker){
         if(cellToCrown.getOccupyingStack()!=null && cellToCrown.getOccupying()!=null
-            && cellToCrown.getOccupying().getPlayer().equals(this)
-            && checker.getPlayer().equals(this)){
+                && cellToCrown.getOccupying().getPlayer().equals(this)
+                && checker.getPlayer().equals(this)){
             checkersToCrown.remove(cellToCrown.getOccupyingStack().bottomChecker);
             this.stacks.add(new StackCheckers(cellToCrown.getOccupyingStack().bottomChecker.getBoard(),
                     cellToCrown.getOccupyingStack().bottomChecker, checker));
@@ -85,6 +153,17 @@ public class Player {
             System.out.println("Can perform the crowning");
         }
     }
+
+//    // Exist available moves
+//    public boolean availableMoves(){
+////        if(stacks.size()==0 && playingCheckers.size()==0){
+////            System.out.println("Player "+ this.playerIndex + "won!");
+////        }
+//        for(StackCheckers stack:stacks){
+//            if(stack)
+//        }
+//        return false;
+//    }
 
 
 }

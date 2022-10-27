@@ -25,17 +25,34 @@ public class BlackChecker extends Checker{
                     " for player " + color);
         }
         // Notify if got to last row
-        if(canCrown()){
-            System.out.println("can crown the checker at " + position.getID());
-//            doCrown(cell);
-            this.board.notifyToCrown(this);
-
-        }
+//        if(canCrown()){
+//            System.out.println("can crown the checker at " + position.getID());
+////            doCrown(cell);
+//            this.board.notifyToCrown(this);
+//
+//        }
 
     }
+
+    @Override
+    public boolean canSlideToNextDiagonal(){
+        if(position.getRow()==1){
+            return false;
+        }
+        if(position.getColumn()==board.getSize()){
+            return board.getCell(position.getRow()-1, position.getColumn()-1).isOccupied();
+        }
+        if(position.getColumn()==board.getSize()){
+            return board.getCell(position.getRow()-1, position.getColumn()+1).isOccupied();
+        }
+        return board.getCell(position.getRow()-1, position.getColumn()+1).isOccupied()
+                || board.getCell(position.getRow()-1, position.getColumn()-1).isOccupied();
+    }
+
+
     public boolean canSlide(Cell goal){
         // Get next checker on diagonal
-        return onCorrectDiagonal(goal) && noCheckerBetween(board.getCell(position.row-1, updateCol(position.column, goal.column)), goal);
+        return this.position!=goal && onCorrectDiagonal(goal) && noCheckerBetween(board.getCell(position.row-1, updateCol(position.column, goal.column)), goal);
     }
     public boolean onCorrectDiagonal(Cell goal){
         return (position.row-goal.row == Math.abs(goal.column-position.column));
@@ -53,6 +70,10 @@ public class BlackChecker extends Checker{
         return noCheckerBetween(board.getCell(row, column), goal);
     }
 
+    // Tranposing to the current checker
+    public void doTransposeOn(Checker checker){
+        doTranspose(checker.getPosition());
+    }
     @Override
     public void doTranspose(Cell cell){
         if(canTranspose(cell)){

@@ -53,10 +53,19 @@ public abstract class Checker {//implements Piece{
                 && this.stack!=null
                 && this.stack.topChecker.equals(this);
     }
+
+    public boolean canSlideToNextDiagonal(){
+        return false;
+    }
     public void doSlide(Cell cell){
 //        canCrown();
     }
+    // Transposing current to checker
+    public boolean canTransposeOn(Checker checker){
+        return checker.stack==null && canTranspose(checker.getPosition());
+    }
     public boolean canTranspose(Cell cell){  return false;}
+    public void doTransposeOn(Checker checker){}
     public void doTranspose(Cell cell){}
 
     public boolean canCrown(){
@@ -141,8 +150,17 @@ public abstract class Checker {//implements Piece{
 
     }
 
-    public void impasse(){
-
+    public void doImpasse(){
+        if(this.stack==null){
+            this.player.removeChecker(this);
+            this.position.setUnoccupied();
+        }
+        else{
+            this.player.removeStack(this.stack);
+            this.position.setUnoccupied();
+            this.position.setOccupation(this.stack.bottomChecker);
+            this.stack.bottomChecker.removeFromStack();
+        }
     }
 
     // Used in methods where checking whether sliding is possible
@@ -160,8 +178,7 @@ public abstract class Checker {//implements Piece{
         this.position = stackCheckers.position;
         this.stack = stackCheckers;
     }
-    public void move(Cell cellTo) {
-    }
+
 }
 
 
