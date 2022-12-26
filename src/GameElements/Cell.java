@@ -95,18 +95,18 @@ public class Cell {
             this.occupyingStack=null;
         }
     }
-    public void needToCrown(){
-//        if(occupied && occupyingStack==null && occupying!=null){
-//            // 0 = White
-//            if(occupying.getPlayer().getPlayerIndex()==0){
-//                needToCrown = (this.row==)
-//            }
+//    public void needToCrown(){
+////        if(occupied && occupyingStack==null && occupying!=null){
+////            // 0 = White
+////            if(occupying.getPlayer().getPlayerIndex()==0){
+////                needToCrown = (this.row==)
+////            }
+////        }
+//        if(this.occupying!=null && this.occupyingStack==null){
+//            this.needToCrown= getOccupying().canCrown;
+//
 //        }
-        if(this.occupying!=null && this.occupyingStack==null){
-            this.needToCrown= getOccupying().canCrown;
-
-        }
-    }
+//    }
     public void crownDone(){
         this.needToCrown = false;
     }

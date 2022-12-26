@@ -201,6 +201,26 @@ public class StackCheckers implements Piece{
                 || !board.getCell(position.getRow() - 1, position.getColumn() - 1).isOccupied();
 
     }
+
+    public boolean canTransposeNext(){
+        if(this.player.getPlayerIndex()==0){
+            // WHITE
+            if(board.getCell(position.row-1, position.column-1).getOccupying()!=null
+                    && board.getCell(position.row-1, position.column-1).getOccupying().getColor()==this.color){
+                return true;
+            }
+            return (board.getCell(position.row-1, position.column-1).getOccupying()!=null
+                    && board.getCell(position.row-1, position.column+1).getOccupying().getColor()==this.color);
+        }else{
+            // BLACK
+            if(board.getCell(position.row+1, position.column-1).getOccupying()!=null
+                    && board.getCell(position.row+1, position.column-1).getOccupying().getColor()==this.color){
+                return true;
+            }
+            return (board.getCell(position.row+1, position.column-1).getOccupying()!=null
+                    && board.getCell(position.row+1, position.column+1).getOccupying().getColor()==this.color);
+        }
+    }
 //    public boolean canTranpose(Cell cell){
 //        if(cell.getOccupying()!= null
 //                && cell.getOccupyingStack()==null

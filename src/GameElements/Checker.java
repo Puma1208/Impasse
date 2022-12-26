@@ -9,7 +9,7 @@ public abstract class Checker {//implements Piece{
     Cell position;
     static Board board;
     StackCheckers stack;
-    boolean canCrown;
+    boolean selectedToCrown;
 
     public Checker(Player player, Cell cell, Board board){
         this.player = player;
@@ -18,7 +18,7 @@ public abstract class Checker {//implements Piece{
         setPosition(cell);
         this.board = board;
         this.stack = null;
-        this.canCrown = false;
+        this.selectedToCrown = false;
     }
     public Board getBoard(){    return board; }
 
@@ -74,6 +74,9 @@ public abstract class Checker {//implements Piece{
     public boolean canBeCrowning(){
         return this.stack==null && !this.player.checkersToCrown.contains(this);
     }
+
+    public void selectedToCrown(){ this.selectedToCrown=true;}
+
 
 
 
@@ -141,13 +144,12 @@ public abstract class Checker {//implements Piece{
 
 
 
-    public void doCrown(){
+    public void doCrown(Checker toCrown){
         this.position.setUnoccupied();
-        StackCheckers stack = new StackCheckers(board, this.player.checkersToCrown.get(0), this,
-                this.player.checkersToCrown.get(0).getPosition());
+        StackCheckers stack = new StackCheckers(board, toCrown, this);
         this.player.addStack(stack);
         this.player.checkersToCrown.remove(0);
-
+        this.selectedToCrown = false;
     }
 
     public void doImpasse(){

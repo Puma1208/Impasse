@@ -17,6 +17,7 @@ public class Board {
     static GamePlay gamePlay;
     static GameState gameState;
     public boolean justBearOff=false;
+    Checker selectedToCrown;
 
     public Board(GamePlay gp, int size, PlayerType type1, PlayerType type2){
         this.gamePlay = gp;
@@ -28,7 +29,7 @@ public class Board {
         // TODO method to update position
         this.checkers = new Checker[2][size][2]; // + (int)Math.ceil(size/2)];
         initialiseCheckers();
-
+        selectedToCrown = null;
 //        gamePlay = new GamePlay(new GameState(this));
     }
 
@@ -38,8 +39,13 @@ public class Board {
         for(int i=0; i<size;i++){
             for(int j=0; j<size; j++){
                 cells[i][j] = new Cell(i+1, j+1);
+                System.out.print("[" + i + ", " + j + "] " +cells[i][j].getID() + " ");
+
             }
+            System.out.println();
+
         }
+
         return cells;
     }
 
@@ -175,4 +181,10 @@ public class Board {
             }
         }
     }
+
+
+    public void playerNotifyCrown(){
+    }
+
+
 }

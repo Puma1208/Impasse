@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class JBoard extends JPanel {
     static final int SCREEN_WIDTH = 700;
     static final int SCREEN_HEIGHT = 700;
+    GamePlay gamePlay;
     Board board;
     int unitSize;
     JCell[][] cells;
@@ -25,7 +26,8 @@ public class JBoard extends JPanel {
     ArrayList<Cell> cellsToCrown = new ArrayList<>();
 
     public JBoard(int size){
-        GamePlay gamePlay = new GamePlay(size, PlayerType.AI, PlayerType.AI);
+        GamePlay gamePlay = new GamePlay(size, PlayerType.HUMAN, PlayerType.HUMAN);
+        this.gamePlay = gamePlay;
         this.board = gamePlay.board;
         this.cells = new JCell[size][size];
         this.unitSize = SCREEN_HEIGHT/(size+2);
@@ -66,6 +68,16 @@ public class JBoard extends JPanel {
     //---------------------------------------------------------
     // HANDLE CLICKS HERE
 
+    public void notifying(JCell jcell){
+        Cell cell = jcell.getCell();
+        if(cell.isOccupied()){
+            if(cell.getOccupying().getPlayer().getPlayerIndex()==this.gamePlay.currentPlayer.getPlayerIndex()){
+                gamePlay.notifying(cell);
+            }else{
+                System.out.println("The selected checker is no ");
+            }
+        }
+    }
 
     public void cellNotifying(JCell jCell){
         Cell cell = jCell.getCell();
@@ -147,7 +159,7 @@ public class JBoard extends JPanel {
     }
     public void updateCrowning(Cell from){
 //        cell.
-        from.getOccupying().doCrown();//this.from.getOccupying().getPlayer().checkersToCrown.get(0).getPosition());
+//        from.getOccupying().doCrown();//this.from.getOccupying().getPlayer().checkersToCrown.get(0).getPosition());
 
     }
 

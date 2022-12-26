@@ -62,7 +62,9 @@ public class Player {
             checker.doSlide(to);
             if(checker.canCrown()){
                 // To implement
-                checker.doCrown();
+                // Notify board
+//                checker.doCrown();
+                checker.getBoard().playerNotifyCrown();
             }
         }else{
             System.out.println("The checker doesn't belong to the current player");
@@ -74,7 +76,10 @@ public class Player {
             stack.doSlide(to);
             if(stack.canBearOff()){
                 stack.doBearOff();
+                // Notify board
                 this.stacks.remove(stack);
+                // Notify board?
+                // Check if after bear-off can crown
             }
         }else{
             System.out.println("The checker doesn't belong to the current player");
@@ -111,6 +116,20 @@ public class Player {
 
     }
 
+    public boolean shouldImpasse(){
+        for(Checker checker:playingCheckers){
+            if(checker.canSlideToNextDiagonal()){
+                return false;
+            }
+        }
+        for(StackCheckers stack:stacks){
+            if(stack.canSlideToNextDiagonal() || stack.canTransposeNext()){
+                return false;
+            }
+        }
+        return true;
+    }
+
     /*
             Bear-off
             Crown
@@ -131,15 +150,15 @@ public class Player {
     }
     // Checks whether there are available checkers other than current to crown
     // For loop to see if there are not in stack :,(
-    public boolean canCrown(){
-        for(Checker playingChecker: playingCheckers){
-            if(!checkersToCrown.contains(playingChecker) && playingChecker.stack==null){
-                return true;
-            }
-        }
-        return false;
-//        return this.playingCheckers.size()>
-    }
+//    public boolean canCrown(){
+//        for(Checker playingChecker: playingCheckers){
+//            if(!checkersToCrown.contains(playingChecker) && playingChecker.stack==null){
+//                return true;
+//            }
+//        }
+//        return false;
+////        return this.playingCheckers.size()>
+//    }
     public void crowning(Cell cellToCrown, Checker checker){
         if(cellToCrown.getOccupyingStack()!=null && cellToCrown.getOccupying()!=null
                 && cellToCrown.getOccupying().getPlayer().equals(this)
@@ -154,7 +173,7 @@ public class Player {
         }
     }
 
-//    // Exist available moves
+    // Exist available moves
 //    public boolean availableMoves(){
 ////        if(stacks.size()==0 && playingCheckers.size()==0){
 ////            System.out.println("Player "+ this.playerIndex + "won!");

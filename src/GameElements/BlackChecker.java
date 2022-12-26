@@ -27,7 +27,7 @@ public class BlackChecker extends Checker{
         // Notify if got to last row
 //        if(canCrown()){
 //            System.out.println("can crown the checker at " + position.getID());
-////            doCrown(cell);
+//            doCrown(cell);
 //            this.board.notifyToCrown(this);
 //
 //        }

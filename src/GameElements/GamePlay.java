@@ -9,8 +9,11 @@ public class GamePlay {
 
 
     public ArrayList<GameState> gameStates = new ArrayList<>();
-    Player currentPlayer;
+    public Player currentPlayer;
     public Board board;
+
+
+    Cell from = null;
 
     public GamePlay(int size, PlayerType player1, PlayerType player2){
         ACTIONS.add("SLIDE");
@@ -43,8 +46,74 @@ public class GamePlay {
         }
 
     }
+
+    public void notifying(Cell cell){
+        // Check if impasse
+
+        // If current cell is not occupied -> checker or stack slide
+        if(!cell.isOccupied()){
+            if(from!=null && from.isOccupied()){
+                if(from.getOccupying()!=null){
+                    from.getOccupying().getPlayer().slide(from.getOccupying(), cell);
+                    from = null;
+                }else if(from.getOccupyingStack()!=null){
+                    // Transpose
+                    if(cell.getOccupying()!=null){
+                        from.getOccupyingStack().getPlayer().transpose(from.getOccupyingStack(), cell.getOccupying());
+                    }else if(cell.getOccupyingStack()!=null){
+                        // Select the other stack
+                        from = cell;
+                    }else{
+                        // Slide
+                        from.getOccupyingStack().getPlayer().slide(from.getOccupyingStack(), cell);
+                        from = null;
+                    }
+
+                }
+            }
+            // Just select the cell
+            else{
+                from = cell;
+            }
+        }
+        else if(cell.getOccupying()!=null){
+
+            // Check if impasse and should remove
+            if(cell.getOccupying().getPlayer().shouldImpasse()){
+                currentPlayer.impasse(cell.getOccupying());
+            }
+            // Check if need to crown
+            if(cell.getOccupying().selectedToCrown){
+//                cell.getOccupying().doCrown();x
+            }
+            if(board.selectedToCrown!=null){
+                cell.getOccupying().doCrown(board.selectedToCrown);
+            }
+
+
+
+        }else if(cell.getOccupyingStack()!=null){
+
+            // Check if impasse and should remove the top checker
+            if(cell.getOccupyingStack().getPlayer().shouldImpasse()){
+                currentPlayer.impasse(cell.getOccupyingStack());
+            }
+        }
+
+
+
+
+
+    }
     public void actionPerformed(){
         switchPlayers();
+        if(currentPlayer.type==PlayerType.HUMAN){
+            // Get input from GUI
+
+        }
+        if(currentPlayer.type==PlayerType.AI){
+            // get input from ai
+        }
         GameState gs = new GameState(gameStates.get(gameStates.size()-1).board, currentPlayer);
 
     }
