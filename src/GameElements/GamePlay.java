@@ -7,7 +7,6 @@ public class GamePlay {
     private static Scanner scanner;
     final static ArrayList<String> ACTIONS = new ArrayList<>();
 
-
     public ArrayList<GameState> gameStates = new ArrayList<>();
     public Player currentPlayer;
     public Board board;
