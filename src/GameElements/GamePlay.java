@@ -10,7 +10,6 @@ public class GamePlay {
     public Player currentPlayer;
     public Board board;
 
-
     Cell from = null;
 
     public GamePlay(int size, PlayerType player1, PlayerType player2){
