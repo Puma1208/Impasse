@@ -1,8 +1,9 @@
 package GameElements;
 import java.awt.*;
 import java.awt.Color;
+import java.util.ArrayList;
 
-public abstract class Checker {//implements Piece{
+public abstract class Checker implements Piece{
 
     Player player;
     Color color;
@@ -19,6 +20,7 @@ public abstract class Checker {//implements Piece{
         this.board = board;
         this.stack = null;
         this.selectedToCrown = false;
+
     }
     public Board getBoard(){    return board; }
 
@@ -61,10 +63,10 @@ public abstract class Checker {//implements Piece{
 //        canCrown();
     }
     // Transposing current to checker
-    public boolean canTransposeOn(Checker checker){
-        return checker.stack==null && canTranspose(checker.getPosition());
-    }
-    public boolean canTranspose(Cell cell){  return false;}
+//    public boolean canTransposeOn(Checker checker){
+//        return checker.stack==null && canTranspose(checker.getPosition());
+//    }
+//    public boolean canTranspose(Cell cell){  return false;}
     public void doTransposeOn(Checker checker){}
     public void doTranspose(Cell cell){}
 
@@ -180,6 +182,47 @@ public abstract class Checker {//implements Piece{
         this.position = stackCheckers.position;
         this.stack = stackCheckers;
     }
+
+    /**
+     *
+        @return The right methods for plays
+     */
+    @Override
+    public boolean canImpasse() {
+        return player.shouldImpasse();
+    }
+
+    @Override
+    public void impasse() {
+        if(this.stack==null){
+            this.player.removeChecker(this);
+            this.position.setUnoccupied();
+        }
+        //TODO - if stack not null -> error
+    }
+
+    @Override
+    public boolean canTranspose(Cell cell){
+        return false;
+    }
+
+    @Override
+    public void transpose(Cell cell) {
+        return;
+    }
+
+    /**
+     * Must be called on a stack - error if called on a checker
+     * TODO check if better to return a null object or an empty array list
+     * @return
+     */
+    @Override
+    public ArrayList<Cell> getPossibleTranspose() {
+        return null;
+    }
+
+
+
 
 }
 

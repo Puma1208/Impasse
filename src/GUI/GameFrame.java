@@ -15,4 +15,15 @@ public class GameFrame extends JFrame {
         this.setVisible(true);
         this.setLocationRelativeTo(null);
     }
+
+    public GameFrame(JBoard jb){
+        this.add(jb);
+        this.setTitle("Impasse 🌈");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.pack();
+
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+    }
 }

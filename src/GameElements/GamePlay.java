@@ -33,74 +33,74 @@ public class GamePlay {
 
     }
 
-    public void startGame(){
-        while(true){
-            System.out.println("Player " + currentPlayer.getPlayerIndex() + " to make a move");
-            makeAction();
-            switchPlayers();
-            gameStates.add(new GameState(this.board, currentPlayer));
-        }
+//    public void startGame(){
+//        while(true){
+//            System.out.println("Player " + currentPlayer.getPlayerIndex() + " to make a move");
+//            makeAction();
+//            switchPlayers();
+//            gameStates.add(new GameState(this.board, currentPlayer));
+//        }
+//
+//    }
 
-    }
-
-    public void notifying(Cell cell){
-        // Check if impasse
-
-        // If current cell is not occupied -> checker or stack slide
-        if(!cell.isOccupied()){
-            if(from!=null && from.isOccupied()){
-                if(from.getOccupying()!=null){
-                    from.getOccupying().getPlayer().slide(from.getOccupying(), cell);
-                    from = null;
-                }else if(from.getOccupyingStack()!=null){
-                    // Transpose
-                    if(cell.getOccupying()!=null){
-                        from.getOccupyingStack().getPlayer().transpose(from.getOccupyingStack(), cell.getOccupying());
-                    }else if(cell.getOccupyingStack()!=null){
-                        // Select the other stack
-                        from = cell;
-                    }else{
-                        // Slide
-                        from.getOccupyingStack().getPlayer().slide(from.getOccupyingStack(), cell);
-                        from = null;
-                    }
-
-                }
-            }
-            // Just select the cell
-            else{
-                from = cell;
-            }
-        }
-        else if(cell.getOccupying()!=null){
-
-            // Check if impasse and should remove
-            if(cell.getOccupying().getPlayer().shouldImpasse()){
-                currentPlayer.impasse(cell.getOccupying());
-            }
-            // Check if need to crown
-            if(cell.getOccupying().selectedToCrown){
-//                cell.getOccupying().doCrown();x
-            }
-            if(board.selectedToCrown!=null){
-                cell.getOccupying().doCrown(board.selectedToCrown);
-            }
-
-
-
-        }else if(cell.getOccupyingStack()!=null){
-
-            // Check if impasse and should remove the top checker
-            if(cell.getOccupyingStack().getPlayer().shouldImpasse()){
-                currentPlayer.impasse(cell.getOccupyingStack());
-            }
-        }
-
-
-
-
-
-    }
+//    public void notifying(Cell cell){
+//        // Check if impasse
+//
+//        // If current cell is not occupied -> checker or stack slide
+//        if(!cell.isOccupied()){
+//            if(from!=null && from.isOccupied()){
+//                if(from.getOccupying()!=null){
+//                    from.getOccupying().getPlayer().slide(from.getOccupying(), cell);
+//                    from = null;
+//                }else if(from.getOccupyingStack()!=null){
+//                    // Transpose
+//                    if(cell.getOccupying()!=null){
+//                        from.getOccupyingStack().getPlayer().transpose(from.getOccupyingStack(), cell.getOccupying());
+//                    }else if(cell.getOccupyingStack()!=null){
+//                        // Select the other stack
+//                        from = cell;
+//                    }else{
+//                        // Slide
+//                        from.getOccupyingStack().getPlayer().slide(from.getOccupyingStack(), cell);
+//                        from = null;
+//                    }
+//
+//                }
+//            }
+//            // Just select the cell
+//            else{
+//                from = cell;
+//            }
+//        }
+//        else if(cell.getOccupying()!=null){
+//
+//            // Check if impasse and should remove
+//            if(cell.getOccupying().getPlayer().shouldImpasse()){
+//                currentPlayer.impasse(cell.getOccupying());
+//            }
+//            // Check if need to crown
+//            if(cell.getOccupying().selectedToCrown){
+////                cell.getOccupying().doCrown();x
+//            }
+//            if(board.selectedToCrown!=null){
+//                cell.getOccupying().doCrown(board.selectedToCrown);
+//            }
+//
+//
+//
+//        }else if(cell.getOccupyingStack()!=null){
+//
+//            // Check if impasse and should remove the top checker
+//            if(cell.getOccupyingStack().getPlayer().shouldImpasse()){
+//                currentPlayer.impasse(cell.getOccupyingStack());
+//            }
+//        }
+//
+//
+//
+//
+//
+//    }
     public void actionPerformed(){
         switchPlayers();
         if(currentPlayer.type==PlayerType.HUMAN){
@@ -132,19 +132,19 @@ public class GamePlay {
         }
     }
 
-    public void makeAction(){
-        scanner = new Scanner(System.in);
-        System.out.println("Make an action");
-        String action = scanner.nextLine();
-//        System.out.println("    Action=" + action);
-        decriptAction(action);
-    }
+//    public void makeAction(){
+//        scanner = new Scanner(System.in);
+//        System.out.println("Make an action");
+//        String action = scanner.nextLine();
+////        System.out.println("    Action=" + action);
+//        decriptAction(action);
+//    }
 
-    public void decriptAction(String inputAction){
-//        String action = inputAction.split(" ");
-//        System.out.println("valid action " + correct(inputAction));
-        performAction(inputAction);
-    }
+//    public void decriptAction(String inputAction){
+////        String action = inputAction.split(" ");
+////        System.out.println("valid action " + correct(inputAction));
+//        performAction(inputAction);
+//    }
 
     public boolean correct(String action){
         String[] strAction = action.split(" ");
@@ -160,29 +160,29 @@ public class GamePlay {
     }
 
 
-    private void performAction(String action) {
-        if(correct(action)){
-            String[] strAction = action.split(" ");
-            switch (strAction[0].toUpperCase()){
-                case "SLIDE":
-                    System.out.println("[" + Character.getNumericValue(strAction[1].charAt(1))
-                                        + ", " + strAction[1].toUpperCase().charAt(0) + "]"
-                                        + "[" + Character.getNumericValue(strAction[2].charAt(1)) + ", "
-                                        + strAction[2].toUpperCase().charAt(0)+"]");
-//                    System.out.println(Character.getNumericValue(strAction[1].charAt(1)));
-                    Cell cell1 = board.getCell(Character.getNumericValue(strAction[1].charAt(1)), strAction[1].toUpperCase().charAt(0));
-                    Cell cell2 = board.getCell(Character.getNumericValue(strAction[2].charAt(1)), strAction[2].toUpperCase().charAt(0));
-                    System.out.println(cell1.getID() + "<>" + cell2.getID());
-                    board.slide(board.getCell(Character.getNumericValue(strAction[1].charAt(0)), strAction[1].toUpperCase().charAt(1)),
-                            board.getCell(Character.getNumericValue(strAction[2].charAt(0)), strAction[2].toUpperCase().charAt(1)));
-            }
-
-        }
-        else{
-            System.out.println("not valid action");
-        }
-
-    }
+//    private void performAction(String action) {
+//        if(correct(action)){
+//            String[] strAction = action.split(" ");
+//            switch (strAction[0].toUpperCase()){
+//                case "SLIDE":
+//                    System.out.println("[" + Character.getNumericValue(strAction[1].charAt(1))
+//                                        + ", " + strAction[1].toUpperCase().charAt(0) + "]"
+//                                        + "[" + Character.getNumericValue(strAction[2].charAt(1)) + ", "
+//                                        + strAction[2].toUpperCase().charAt(0)+"]");
+////                    System.out.println(Character.getNumericValue(strAction[1].charAt(1)));
+//                    Cell cell1 = board.getCell(Character.getNumericValue(strAction[1].charAt(1)), strAction[1].toUpperCase().charAt(0));
+//                    Cell cell2 = board.getCell(Character.getNumericValue(strAction[2].charAt(1)), strAction[2].toUpperCase().charAt(0));
+//                    System.out.println(cell1.getID() + "<>" + cell2.getID());
+//                    board.slide(board.getCell(Character.getNumericValue(strAction[1].charAt(0)), strAction[1].toUpperCase().charAt(1)),
+//                            board.getCell(Character.getNumericValue(strAction[2].charAt(0)), strAction[2].toUpperCase().charAt(1)));
+//            }
+//
+//        }
+//        else{
+//            System.out.println("not valid action");
+//        }
+//
+//    }
 
 
 }

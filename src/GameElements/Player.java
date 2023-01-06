@@ -70,32 +70,32 @@ public class Player {
             System.out.println("The checker doesn't belong to the current player");
         }
     }
-    public void slide(StackCheckers stack, Cell to){
-        // Check if stack belongs to player
-        if(stack.getPlayer().equals(this)){
-            stack.doSlide(to);
-            if(stack.canBearOff()){
-                stack.doBearOff();
-                // Notify board
-                this.stacks.remove(stack);
-                // Notify board?
-                // Check if after bear-off can crown
-            }
-        }else{
-            System.out.println("The checker doesn't belong to the current player");
-        }
-
-    }
-    public void transpose(StackCheckers stack, Checker checker){
-        // Check if stack and checker belongs to player
-        if(stack.getPlayer().equals(this) && checker.getPlayer().equals(this)
-                && stack.topChecker.canTransposeOn(checker)){
-            stack.getTopChecker().doTransposeOn(checker);
-        }else{
-            System.out.println("The checker or/and the stack doesn't belong to the current player");
-        }
-
-    }
+//    public void slide(StackCheckers stack, Cell to){
+//        // Check if stack belongs to player
+//        if(stack.getPlayer().equals(this)){
+//            stack.doSlide(to);
+//            if(stack.canBearOff()){
+//                stack.doBearOff();
+//                // Notify board
+//                this.stacks.remove(stack);
+//                // Notify board?
+//                // Check if after bear-off can crown
+//            }
+//        }else{
+//            System.out.println("The checker doesn't belong to the current player");
+//        }
+//
+//    }
+//    public void transpose(StackCheckers stack, Checker checker){
+//        // Check if stack and checker belongs to player
+//        if(stack.getPlayer().equals(this) && checker.getPlayer().equals(this)
+//                && stack.topChecker.canTransposeOn(checker)){
+//            stack.getTopChecker().doTransposeOn(checker);
+//        }else{
+//            System.out.println("The checker or/and the stack doesn't belong to the current player");
+//        }
+//
+//    }
     public void impasse(Checker checker){
         // Check if checker belongs to player
         if(checker.getPlayer().equals(this)){
@@ -118,12 +118,12 @@ public class Player {
 
     public boolean shouldImpasse(){
         for(Checker checker:playingCheckers){
-            if(checker.canSlideToNextDiagonal()){
+            if(checker.getPossibleSlide().size()==0){
                 return false;
             }
         }
         for(StackCheckers stack:stacks){
-            if(stack.canSlideToNextDiagonal() || stack.canTransposeNext()){
+            if(stack.getPossibleSlide().size()==0 || stack.getPossibleTranspose().size()>0){
                 return false;
             }
         }

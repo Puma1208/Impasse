@@ -1,6 +1,7 @@
 package GameElements;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class BlackChecker extends Checker{
 
@@ -16,23 +17,23 @@ public class BlackChecker extends Checker{
 //    public void move(Cell cell){
 //
 //    }
-    @Override
-    public void doSlide(Cell cell){
-        if(canSlide(cell)){
-            setPosition(cell);
-        }else{
-            System.out.println("Can't go from cell " + this.position.getID() + " to cell " + cell.getID() +
-                    " for player " + color);
-        }
-        // Notify if got to last row
-//        if(canCrown()){
-//            System.out.println("can crown the checker at " + position.getID());
-//            doCrown(cell);
-//            this.board.notifyToCrown(this);
-//
+//    @Override
+//    public void doSlide(Cell cell){
+//        if(canSlide(cell)){
+//            setPosition(cell);
+//        }else{
+//            System.out.println("Can't go from cell " + this.position.getID() + " to cell " + cell.getID() +
+//                    " for player " + color);
 //        }
-
-    }
+//        // Notify if got to last row
+////        if(canCrown()){
+////            System.out.println("can crown the checker at " + position.getID());
+////            doCrown(cell);
+////            this.board.notifyToCrown(this);
+////
+////        }
+//
+//    }
 
     @Override
     public boolean canSlideToNextDiagonal(){
@@ -49,11 +50,14 @@ public class BlackChecker extends Checker{
                 || board.getCell(position.getRow()-1, position.getColumn()-1).isOccupied();
     }
 
+//
+//    public boolean canSlide(Cell goal){
+//        // Get next checker on diagonal
+//        return this.position!=goal && onCorrectDiagonal(goal) && noCheckerBetween(board.getCell(position.row-1, updateCol(position.column, goal.column)), goal);
+//    }
 
-    public boolean canSlide(Cell goal){
-        // Get next checker on diagonal
-        return this.position!=goal && onCorrectDiagonal(goal) && noCheckerBetween(board.getCell(position.row-1, updateCol(position.column, goal.column)), goal);
-    }
+
+
     public boolean onCorrectDiagonal(Cell goal){
         return (position.row-goal.row == Math.abs(goal.column-position.column));
     }
@@ -74,25 +78,25 @@ public class BlackChecker extends Checker{
     public void doTransposeOn(Checker checker){
         doTranspose(checker.getPosition());
     }
-    @Override
-    public void doTranspose(Cell cell){
-        if(canTranspose(cell)){
-            this.player.removeStack(this.stack);
-            this.position.setUnoccupied();
-            this.position.setOccupation(this.stack.bottomChecker);
-            this.stack.bottomChecker.removeFromStack();
-            StackCheckers stackAfterTranspose = new StackCheckers(board, cell.getOccupying(), this, cell);
-            this.player.addStack(stackAfterTranspose);
-            if(stackAfterTranspose.canBearOff()){
-                stackAfterTranspose.doBearOff();
-            }
-        }
-        else{
-            System.out.println("Can't transpose from " + this.position.getID() + " to " + cell.getID());
-
-        }
-
-    }
+//    @Override
+//    public void doTranspose(Cell cell){
+//        if(canTranspose(cell)){
+//            this.player.removeStack(this.stack);
+//            this.position.setUnoccupied();
+//            this.position.setOccupation(this.stack.bottomChecker);
+//            this.stack.bottomChecker.removeFromStack();
+//            StackCheckers stackAfterTranspose = new StackCheckers(board, cell.getOccupying(), this, cell);
+//            this.player.addStack(stackAfterTranspose);
+//            if(stackAfterTranspose.canBearOff()){
+//                stackAfterTranspose.doBearOff();
+//            }
+//        }
+//        else{
+//            System.out.println("Can't transpose from " + this.position.getID() + " to " + cell.getID());
+//
+//        }
+//
+//    }
 
     // Only using when current is the top checker
     @Override
@@ -139,4 +143,60 @@ public class BlackChecker extends Checker{
     public void chooseToCrown(){
         // get input from player - GUI - or AI
     }
+
+
+    /*
+     The right methods for plays
+  */
+    @Override
+    public boolean canSlide(Cell cell) {
+        return false;
+    }
+
+    @Override
+    public void slide(Cell cell) {
+
+    }
+
+    /**
+     * @return all the possible cell positions the current piece can be in
+     */
+    @Override
+    public ArrayList<Cell> getPossibleSlide() {
+        Cell current = this.position;
+        ArrayList<Cell> cells = new ArrayList<>();
+        // Slides to the left
+        while(getNextLeft(current)!=null && !getNextLeft(current).isOccupied()) {
+            cells.add(getNextLeft(current));
+            current = getNextLeft(current);
+
+        }
+        current = this.position;
+        // Slides to the right
+        while(getNextRight(current)!=null && !getNextRight(current).isOccupied()) {
+            cells.add(getNextRight(current));
+            current = getNextRight(current);
+
+        }
+        return cells;
+    }
+
+    @Override
+    public Cell getNextLeft(Cell current){
+        if(current.row <=1 || current.column>=board.getSize()){
+            return null;
+        }
+        return board.getCell(current.row-1, current.column+1);
+    }
+
+    @Override
+    public Cell getNextRight(Cell current){
+        if(current.row <=1 || current.column<=1){
+            return null;
+        }
+        return board.getCell(current.row-1, current.column-1);
+    }
+
+
+
 }

@@ -26,6 +26,7 @@ public class JCell extends JPanel implements MouseListener {
         this.size = size;
         this.color = cell.getColor();
         addMouseListener(this);
+
     }
 
     @Override
@@ -82,7 +83,7 @@ public class JCell extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        jboard.cellNotifying(this);
+//        jboard.cellNotifying(this);
     }
 
     @Override

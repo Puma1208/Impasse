@@ -13,7 +13,7 @@ public class Cell {
 
     private boolean occupied;
     public Checker occupying;
-    private StackCheckers occupyingStack;
+    public StackCheckers occupyingStack;
 
     boolean needToCrown;
 
@@ -67,6 +67,7 @@ public class Cell {
             this.occupyingStack = null;
         }else{
             this.occupied = true;
+            stack.bottomChecker.setPosition(this);
             stack.getBottomChecker().position = this;
             stack.getTopChecker().position = this;
             this.occupyingStack = stack;

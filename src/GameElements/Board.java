@@ -3,6 +3,7 @@ package GameElements;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Board {
     static final char[] LETTERS = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
@@ -39,10 +40,10 @@ public class Board {
         for(int i=0; i<size;i++){
             for(int j=0; j<size; j++){
                 cells[i][j] = new Cell(i+1, j+1);
-                System.out.print("[" + i + ", " + j + "] " +cells[i][j].getID() + " ");
+//                System.out.print("[" + i + ", " + j + "] " +cells[i][j].getID() + " ");
 
             }
-            System.out.println();
+//            System.out.println();
 
         }
 
@@ -144,8 +145,12 @@ public class Board {
         return getCell(row, stringColToIndex(col));
     }
     public int stringColToIndex(char col){
-        if(Arrays.asList(LETTERS).contains(col)){
-            return Arrays.asList(LETTERS).indexOf(col);
+        List<Character> letters = new ArrayList<>();
+        for(char c: LETTERS){
+            letters.add(c);
+        }
+        if(letters.contains(col)){
+            return letters.indexOf(col)+1;
         }
         return -1;
 
@@ -160,27 +165,27 @@ public class Board {
         justBearOff = true;
     }
 
-    public void slide(Cell from, Cell to){
-        System.out.println("so we're sliding " + from.getID() + ">"+ to.getID());
-
-        if(from.isOccupied()){
-
-            if(from.getOccupyingStack()!=null){
-                System.out.println("Stack chosen");
-                if(from.getOccupyingStack().getPlayer().getPlayerIndex()!=this.gameState.current.getPlayerIndex()){
-                    System.out.println("this player is not allowed to move the current stack");
-                }else{ from.getOccupyingStack().doSlide(to);}
-
-            }else if(from.getOccupying()!=null){
-                System.out.println("Checker chosen");
-
-                if(from.getOccupying().getPlayer().getPlayerIndex()!=this.gameState.current.getPlayerIndex()){
-                    System.out.println("this player is not allowed to move the current stack");
-                }else{ from.getOccupying().doSlide(to);}
-
-            }
-        }
-    }
+//    public void slide(Cell from, Cell to){
+//        System.out.println("so we're sliding " + from.getID() + ">"+ to.getID());
+//
+//        if(from.isOccupied()){
+//
+//            if(from.getOccupyingStack()!=null){
+//                System.out.println("Stack chosen");
+//                if(from.getOccupyingStack().getPlayer().getPlayerIndex()!=this.gameState.current.getPlayerIndex()){
+//                    System.out.println("this player is not allowed to move the current stack");
+//                }else{ from.getOccupyingStack().doSlide(to);}
+//
+//            }else if(from.getOccupying()!=null){
+//                System.out.println("Checker chosen");
+//
+//                if(from.getOccupying().getPlayer().getPlayerIndex()!=this.gameState.current.getPlayerIndex()){
+//                    System.out.println("this player is not allowed to move the current stack");
+//                }else{ from.getOccupying().doSlide(to);}
+//
+//            }
+//        }
+//    }
 
 
     public void playerNotifyCrown(){

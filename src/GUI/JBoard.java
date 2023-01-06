@@ -37,6 +37,17 @@ public class JBoard extends JPanel {
         this.setFocusable(true);
 
     }
+
+    public JBoard(Board b){
+        this.board = b;
+        this.unitSize = SCREEN_HEIGHT/(b.getSize()+2);
+        this.cells = new JCell[b.getSize()][b.getSize()];
+
+        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        this.setBackground(Color.white);
+        this.setFocusable(true);
+
+    }
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -72,91 +83,91 @@ public class JBoard extends JPanel {
         Cell cell = jcell.getCell();
         if(cell.isOccupied()){
             if(cell.getOccupying().getPlayer().getPlayerIndex()==this.gamePlay.currentPlayer.getPlayerIndex()){
-                gamePlay.notifying(cell);
+//                gamePlay.notifying(cell);
             }else{
                 System.out.println("The selected checker is no ");
             }
         }
     }
 
-    public void cellNotifying(JCell jCell){
-        Cell cell = jCell.getCell();
-        if(board.justBearOff){
-            from=null;
-            board.justBearOff = false;
-        }else{
-            if(cell.isOccupied()){
-                // Stack selected
-                if(cell.getOccupyingStack()!=null){
-                    from = cell;
-                    stackSelected = cell.getOccupyingStack();
-                    System.out.println("Selecting stack at "+ cell.getID() + ">" + stackSelected.getBottomChecker().getPosition().getID() + "***" +
-                            stackSelected.getTopChecker().getPosition().getID());
-
-                }
-                // Checker selected
-                else if(cell.getOccupying()!=null) {
-                    // Stack chosen before current checker
-                    if(stackSelected!=null
-                            && stackSelected.getTopChecker().canTranspose(cell)
-                            && stackSelected.getColor().equals(cell.getOccupying().getColor())){
-                        // Transpose
-                        updateTranspose(cell);
-                        stackSelected = null;
-                        from=null;
-                    }
-                    else{
-                        // just select the checker
-                        // Check if need to crown with current and can crown with current
-                        if(cell.getOccupying().getPlayer().checkersToCrown.size()>0
-                                && !cell.getOccupying().getPlayer().checkersToCrown.contains(cell.getOccupying())){
-                            if(cell.getOccupying().canBeCrowning()){
+//    public void cellNotifying(JCell jCell){
+//        Cell cell = jCell.getCell();
+//        if(board.justBearOff){
+//            from=null;
+//            board.justBearOff = false;
+//        }else{
+//            if(cell.isOccupied()){
+//                // Stack selected
+//                if(cell.getOccupyingStack()!=null){
+//                    from = cell;
+//                    stackSelected = cell.getOccupyingStack();
+//                    System.out.println("Selecting stack at "+ cell.getID() + ">" + stackSelected.getBottomChecker().getPosition().getID() + "***" +
+//                            stackSelected.getTopChecker().getPosition().getID());
+//
+//                }
+//                // Checker selected
+//                else if(cell.getOccupying()!=null) {
+//                    // Stack chosen before current checker
+//                    if(stackSelected!=null
+//                            && stackSelected.getTopChecker().canTranspose(cell)
+//                            && stackSelected.getColor().equals(cell.getOccupying().getColor())){
+//                        // Transpose
+//                        updateTranspose(cell);
+//                        stackSelected = null;
+//                        from=null;
+//                    }
+//                    else{
+//                        // just select the checker
+//                        // Check if need to crown with current and can crown with current
+//                        if(cell.getOccupying().getPlayer().checkersToCrown.size()>0
+//                                && !cell.getOccupying().getPlayer().checkersToCrown.contains(cell.getOccupying())){
+//                            if(cell.getOccupying().canBeCrowning()){
+////                            from = cell;
+//                                updateCrowning(cell);
+//                                from=null;
+//                            }
+//                        }
+//                        else{
+//                            System.out.println("Selecting checker at " + cell.getID());
 //                            from = cell;
-                                updateCrowning(cell);
-                                from=null;
-                            }
-                        }
-                        else{
-                            System.out.println("Selecting checker at " + cell.getID());
-                            from = cell;
-                        }
-
-                    }
-                }
-            }
-            else if(from!=null){
-//            System.out.println("Sliding element");
-                updateSliding(cell);
-                this.from = null;
-                this.stackSelected = null;
-            }
-        }
-
-//        System.out.println("current board ");
-//        for(Cell[] row: board.getCells()){
-//            for(Cell c:row){
-//                System.out.print(this.board.getCell(c.getRow(), c.getColumn()).getID() + ">[" + (c.getOccupying()!=null) + "," + (c.getOccupyingStack()!=null) + "]  ");
+//                        }
+//
+//                    }
+//                }
+//            }
+//            else if(from!=null){
+////            System.out.println("Sliding element");
+//                updateSliding(cell);
+//                this.from = null;
+//                this.stackSelected = null;
 //            }
 //        }
-//        System.out.println();
-    }
+//
+////        System.out.println("current board ");
+////        for(Cell[] row: board.getCells()){
+////            for(Cell c:row){
+////                System.out.print(this.board.getCell(c.getRow(), c.getColumn()).getID() + ">[" + (c.getOccupying()!=null) + "," + (c.getOccupyingStack()!=null) + "]  ");
+////            }
+////        }
+////        System.out.println();
+//    }
 
     public void updateSliding(Cell to){
         if(from.isOccupied()){
             if(from.getOccupyingStack()!=null){
-                from.getOccupyingStack().doSlide(to);
+//                from.getOccupyingStack().doSlide(to);
             }else if(from.getOccupying()!=null){
                 from.getOccupying().doSlide(to);
             }
         }
     }
 
-    public void updateTranspose(Cell to){
-        System.out.println("Willing to transpose " + stackSelected.getPosition().getID() + " to " + to.getID() + ">" + stackSelected.getTopChecker().canTranspose(to));
-        if(stackSelected.getTopChecker().canTranspose(to)){
-            from.getOccupyingStack().getTopChecker().doTranspose(to);
-        }
-    }
+//    public void updateTranspose(Cell to){
+//        System.out.println("Willing to transpose " + stackSelected.getPosition().getID() + " to " + to.getID() + ">" + stackSelected.getTopChecker().canTranspose(to));
+//        if(stackSelected.getTopChecker().canTranspose(to)){
+//            from.getOccupyingStack().getTopChecker().doTranspose(to);
+//        }
+//    }
     public void updateCrowning(Cell from){
 //        cell.
 //        from.getOccupying().doCrown();//this.from.getOccupying().getPlayer().checkersToCrown.get(0).getPosition());
