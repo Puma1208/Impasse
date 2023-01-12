@@ -94,10 +94,10 @@ public class Board {
             }
             this.checkers[player.getPlayerIndex()][index][1] = topChecker;
             StackCheckers stack = new StackCheckers(this, checker, topChecker);
-            this.players[player.getPlayerIndex()].stacks.add(stack);
+//            this.players[player.getPlayerIndex()].addStack(stack);
         }
         else{
-            this.players[player.getPlayerIndex()].addChecker(checker);
+//            this.players[player.getPlayerIndex()].addChecker(checker);
         }
     }
     public boolean canCreateStack(Checker checker){

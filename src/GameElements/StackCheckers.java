@@ -17,8 +17,7 @@ public class StackCheckers implements Piece{
         if(bottomChecker.getPlayer().equals(topChecker.getPlayer())){
             this.board = board;
             this.player = bottomChecker.getPlayer();
-//            System.out.println("setting player " + player.getPlayerIndex());
-//            this.player.addStack(this);
+            this.player.addStack(this);
             this.bottomChecker = bottomChecker;
             this.topChecker = topChecker;
             this.position = cell;
@@ -41,7 +40,6 @@ public class StackCheckers implements Piece{
             this.position.setUnoccupied();
         }
         this.position = cell;
-//        this.topChecker.position = position;
         this.position.setOccupyingStack(this);
     }
     public void updatePos(){
@@ -140,63 +138,11 @@ public class StackCheckers implements Piece{
         }
     }
 
-    public void doBearOff(){
-        this.position.removeCurrentStack();
-//        this.board.notifyToBearOff(this);
-    }
-
-    public boolean canBearOff(){
-        // Index = 0 -> white player
-        if(this.player.getPlayerIndex()==0){
-            return this.position.row==1;
-        }
-        return this.position.row==board.getSize();
-    }
 
     public void setPlayer(Player player) {
         if(this.player==null){
             this.player = player;
         }
-    }
-
-//    public void doImpasse(){
-//        if(canImpasse()){
-//            this.player.removeChecker(topChecker);
-//            this.position.setOccupation(this.bottomChecker);
-//            this.player.removeStack(this);
-//        }
-//    }
-
-
-    public boolean canSlideToNextDiagonal(){
-        // WHITE
-        if(this.player.getPlayerIndex()==0) {
-            if(position.getRow()==board.getSize()){
-                return false;
-            }
-            if(position.getColumn()==board.getSize()){
-                return board.getCell(position.getRow()+1, position.getColumn()-1).isOccupied();
-            }
-            if(position.getColumn()==board.getSize()){
-                return board.getCell(position.getRow()+1, position.getColumn()+1).isOccupied();
-            }
-            return board.getCell(position.getRow()+1, position.getColumn()+1).isOccupied()
-                    || board.getCell(position.getRow()+1, position.getColumn()-1).isOccupied();
-
-        }
-        else
-        if (position.getRow() == 1) {
-            return false;
-        }
-        if (position.getColumn() == board.getSize()) {
-            return !board.getCell(position.getRow() - 1, position.getColumn() - 1).isOccupied();
-        }
-        if (position.getColumn() == board.getSize()) {
-            return !board.getCell(position.getRow() - 1, position.getColumn() + 1).isOccupied();
-        }
-        return !board.getCell(position.getRow() - 1, position.getColumn() + 1).isOccupied()
-                || !board.getCell(position.getRow() - 1, position.getColumn() - 1).isOccupied();
-
     }
 
 
@@ -211,20 +157,42 @@ public class StackCheckers implements Piece{
 
     @Override
     public void impasse() {
-        this.player.removeChecker(topChecker);
-        this.position.occupyingStack = null;
-        this.position.setOccupation(this.bottomChecker);
-        this.bottomChecker.stack = null;
-        this.player.removeStack(this);
+        if(canImpasse()){
+            this.position.occupyingStack = null;
+            this.position.setOccupation(this.bottomChecker);
+            this.bottomChecker.stack = null;
+            this.player.removeTopChecker(this);
+            if(this.bottomChecker.mustCrown()){
+                System.out.println("Must crown checker at " + this.position.getID());
+                this.bottomChecker.mustCrown = true;
+            }
+        }
+        else{
+            System.out.println("Can't impasse stack at " + this.position.getID());
+        }
+
     }
 
     @Override
     public boolean canSlide(Cell cell) {
-        return false;
+        return getPossibleSlide().contains(cell);
     }
 
+
+    /**
+     * Check if can slide
+     *      When slide allowed -> check if can bear-off
+     *
+     * @param cell
+     */
     @Override
     public void slide(Cell cell) {
+        if(canSlide(cell)){
+            setPosition(cell);
+            bearOff();
+        }else{
+            System.out.println("Can't slide stack at " + this.position.getID() +"  to " + cell.getID());
+        }
 
     }
 
@@ -252,13 +220,17 @@ public class StackCheckers implements Piece{
 
     @Override
     public void transpose(Cell cell) {
-        this.player.removeStack(this);
-        StackCheckers newStack = new StackCheckers(board, cell.getOccupying(), this.topChecker);
-        this.player.addStack(newStack);
-
-        this.position.setUnoccupied();
-        this.position.setOccupation(this.bottomChecker);
-
+        if(canTranspose(cell)){
+            this.bottomChecker.stack = null;
+            this.player.removeStack(this);
+            new StackCheckers(board, cell.getOccupying(), this.topChecker);
+            this.position.setUnoccupied();
+            this.position.setOccupation(this.bottomChecker);
+            bearOff();
+        }
+        else{
+            System.out.println("Can't transpose stack at " + this.position.getID());
+        }
     }
 
     /**
@@ -266,8 +238,21 @@ public class StackCheckers implements Piece{
      */
     @Override
     public ArrayList<Cell> getPossibleSlide() {
+        ArrayList<Cell> slideList = new ArrayList<>();
+        Cell current = this.position;
+        while(getNextLeft(current)!=null && !getNextLeft(current).isOccupied()) {
+            slideList.add(getNextLeft(current));
+            current = getNextLeft(current);
 
-        return null;
+        }
+        current = this.position;
+        // Slides to the right
+        while(getNextRight(current)!=null && !getNextRight(current).isOccupied()) {
+            slideList.add(getNextRight(current));
+            current = getNextRight(current);
+
+        }
+        return slideList;
     }
 
     /**
@@ -278,7 +263,6 @@ public class StackCheckers implements Piece{
     @Override
     public ArrayList<Cell> getPossibleTranspose() {
         ArrayList<Cell> transposeList = new ArrayList<>();
-
         if(this.player.color == Color.WHITE){
             Cell left = board.getCell(this.position.row-1, this.position.column-1);
             Cell right = board.getCell(this.position.row-1, this.position.column+1);
@@ -344,6 +328,44 @@ public class StackCheckers implements Piece{
             return board.getCell(current.row+1, current.column+1);
         }
         return null;
+    }
+
+    /**
+     * @return if a checker - ! not stack can be crowned
+     */
+    @Override
+    public boolean mustCrown() {
+        return false;
+    }
+
+    /**
+     * Check if the current stack is in the nearest row
+     * with respect to the current player
+     *
+     * @return if the top checker of the current stack can be removed
+     */
+    public boolean canBearOff(){
+        return (this.color==Color.WHITE && this.position.row==1) ||
+                (this.color==Color.BLACK && this.position.row==board.getSize());
+    }
+
+    /**
+     * Remove stack - from cell, player, bottom checker
+     * Remove top checker from player
+     */
+    public void bearOff(){
+        if(canBearOff()){
+            this.position.setUnoccupied();
+            this.position.setOccupation(this.bottomChecker);
+            this.player.removeTopChecker(this);
+            if(this.bottomChecker.mustCrown()){
+                System.out.println("Must crown checker at " + this.position.getID());
+                this.bottomChecker.mustCrown = true;
+            }
+        }
+        else{
+            System.out.println("Can't bear-off stack at " + this.position.getID());
+        }
     }
 
 }

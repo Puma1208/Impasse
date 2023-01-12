@@ -152,15 +152,6 @@ public class JBoard extends JPanel {
 ////        System.out.println();
 //    }
 
-    public void updateSliding(Cell to){
-        if(from.isOccupied()){
-            if(from.getOccupyingStack()!=null){
-//                from.getOccupyingStack().doSlide(to);
-            }else if(from.getOccupying()!=null){
-                from.getOccupying().doSlide(to);
-            }
-        }
-    }
 
 //    public void updateTranspose(Cell to){
 //        System.out.println("Willing to transpose " + stackSelected.getPosition().getID() + " to " + to.getID() + ">" + stackSelected.getTopChecker().canTranspose(to));

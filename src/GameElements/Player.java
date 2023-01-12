@@ -2,11 +2,12 @@ package GameElements;
 import com.sun.jdi.StackFrame;
 
 import java.awt.Color;
+import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 // To change
 public class Player {
-    //White, Black;
 
     PlayerType type;
     int score = 0;
@@ -26,14 +27,22 @@ public class Player {
         this.shouldCrown = false;
         playerIndex = indexFromColor();
     }
+
     public int indexFromColor(){
         if(this.color==Color.WHITE){
             return 0;
         }
         return 1;
     }
-    public int getPlayerIndex(){    return playerIndex; }
-    public Color getColor(){ return this.color; }
+
+    public int getPlayerIndex(){
+        return playerIndex;
+    }
+
+    public Color getColor(){
+        return this.color;
+    }
+
     public void removeChecker(Checker checker){
         if(this.playingCheckers.contains(checker)){
             playingCheckers.remove(checker);
@@ -46,85 +55,45 @@ public class Player {
     public void addChecker(Checker checker){
         this.playingCheckers.add(checker);
     }
+
     public void addStack(StackCheckers stack){
         this.stacks.add(stack);
         stack.setPlayer(this);
     }
-    public void removeStack(StackCheckers stack) { this.stacks.remove(stack);}
-
-
-    /*
-        The Basic Moves + Impasse
-     */
-    public void slide(Checker checker, Cell to){
-        // Check if checker belongs to player
-        if(checker.getPlayer().equals(this)){
-            checker.doSlide(to);
-            if(checker.canCrown()){
-                // To implement
-                // Notify board
-//                checker.doCrown();
-                checker.getBoard().playerNotifyCrown();
-            }
-        }else{
-            System.out.println("The checker doesn't belong to the current player");
-        }
+    public void removeStack(StackCheckers stack) {
+        removeChecker(stack.bottomChecker);
+        removeChecker(stack.topChecker);
+        this.stacks.remove(stack);
     }
-//    public void slide(StackCheckers stack, Cell to){
-//        // Check if stack belongs to player
-//        if(stack.getPlayer().equals(this)){
-//            stack.doSlide(to);
-//            if(stack.canBearOff()){
-//                stack.doBearOff();
-//                // Notify board
-//                this.stacks.remove(stack);
-//                // Notify board?
-//                // Check if after bear-off can crown
-//            }
-//        }else{
-//            System.out.println("The checker doesn't belong to the current player");
-//        }
-//
-//    }
-//    public void transpose(StackCheckers stack, Checker checker){
-//        // Check if stack and checker belongs to player
-//        if(stack.getPlayer().equals(this) && checker.getPlayer().equals(this)
-//                && stack.topChecker.canTransposeOn(checker)){
-//            stack.getTopChecker().doTransposeOn(checker);
-//        }else{
-//            System.out.println("The checker or/and the stack doesn't belong to the current player");
-//        }
-//
-//    }
-    public void impasse(Checker checker){
-        // Check if checker belongs to player
-        if(checker.getPlayer().equals(this)){
-            // Check if can do, or should do impasse
-            checker.doImpasse();
-        }else{
-            System.out.println("The checker doesn't belong to the current player");
-        }
 
+    public void removeTopChecker(StackCheckers stack){
+        removeChecker(stack.topChecker);
+        this.stacks.remove(stack);
     }
-    public void impasse(StackCheckers stack){
-        // Check if stack belongs to player
-        if(stack.getPlayer().equals(this)){
-            stack.topChecker.doImpasse();
-        }else{
-            System.out.println("The stack doesn't belong to the current player");
-        }
 
-    }
+
 
     public boolean shouldImpasse(){
         for(Checker checker:playingCheckers){
-            if(checker.getPossibleSlide().size()==0){
+            if(checker.stack==null && checker.getPossibleSlide().size()>0){
+                System.out.println("checker at " + checker.position.getID() + " can slide to");
+                for(Cell c: checker.getPossibleSlide()){
+                    System.out.println("    " + c.getID());
+                }
                 return false;
             }
         }
         for(StackCheckers stack:stacks){
-            if(stack.getPossibleSlide().size()==0 || stack.getPossibleTranspose().size()>0){
+            if(stack.getPossibleSlide().size()>0 || stack.getPossibleTranspose().size()>0){
+                System.out.println("stack at " + stack.position.getID() + " can slide to");
+                for(Cell c: stack.getPossibleSlide()){
+                    System.out.println("    " + c.getID());
+                }
+                for(Cell c: stack.getPossibleTranspose()){
+                    System.out.println("    transpose to " + c.getID());
+                }
                 return false;
+
             }
         }
         return true;
@@ -183,6 +152,34 @@ public class Player {
 //        }
 //        return false;
 //    }
+
+    /**
+     * The checkers should not be on a stack
+     * @return the list of all the possible checkers that could be used to crown
+     */
+    public ArrayList<Checker> getSingleChecker(){
+        ArrayList<Checker> singles = new ArrayList<>();
+        for(Checker c: playingCheckers){
+            if(c.stack==null){
+                singles.add(c);
+            }
+        }
+        return singles;
+    }
+
+    /**
+     * Return all the checkers the player should crown from previous turns
+     * @return
+     */
+    public ArrayList<Checker> getCheckersToCrown(){
+        ArrayList<Checker> singlesToCrown = new ArrayList<>();
+        for(Checker c: getSingleChecker()){
+            if(c.mustCrown){
+                singlesToCrown.add(c);
+            }
+        }
+        return singlesToCrown;
+    }
 
 
 }

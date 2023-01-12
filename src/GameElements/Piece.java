@@ -5,6 +5,7 @@ import java.util.ArrayList;
 // Extended by stack and checker
 public interface Piece {
 
+
     boolean canImpasse();
     void impasse();
     boolean canSlide(Cell cell);
@@ -27,4 +28,10 @@ public interface Piece {
      @return The next cell to the right of the player
      */
     Cell getNextRight(Cell current);
+
+    /**
+     *
+     * @return if a checker - ! not stack can be crowned
+     */
+    boolean mustCrown();
 }

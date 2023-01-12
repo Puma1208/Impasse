@@ -61,6 +61,11 @@ public class Cell {
         this.occupied = true;
         this.occupying = checker;
     }
+
+    /**
+     * Should only be called form StackChecker setPosition()
+     * @param stack
+     */
     public void setOccupyingStack(StackCheckers stack){
         if(stack==null){
             this.occupied = false;
@@ -78,6 +83,7 @@ public class Cell {
     public boolean isOccupied(){
         return (occupied && (this.occupying!=null || this.occupyingStack!=null));
     }
+
     public int getColumn(){
         return column;
     }
@@ -88,6 +94,7 @@ public class Cell {
     public StackCheckers getOccupyingStack(){
         return occupyingStack;
     }
+
     // Keep bottom checker on current cell and remove stack from current position
     public void removeCurrentStack(){
         if(this.getOccupyingStack()!=null){// && occupied){

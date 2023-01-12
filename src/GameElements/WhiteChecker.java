@@ -27,20 +27,6 @@ public class WhiteChecker extends Checker{
 //
 //    }
 
-    @Override
-    public boolean canSlideToNextDiagonal(){
-        if(position.getRow()==board.getSize()){
-            return false;
-        }
-        if(position.getColumn()==board.getSize()){
-            return board.getCell(position.getRow()+1, position.getColumn()-1).isOccupied();
-        }
-        if(position.getColumn()==board.getSize()){
-            return board.getCell(position.getRow()+1, position.getColumn()+1).isOccupied();
-        }
-        return board.getCell(position.getRow()+1, position.getColumn()+1).isOccupied()
-                || board.getCell(position.getRow()+1, position.getColumn()-1).isOccupied();
-    }
 //    @Override
 //    public void doSlide(Cell cell){
 //        System.out.println("sliding current to cell " + cell.getID());
@@ -74,12 +60,6 @@ public class WhiteChecker extends Checker{
         return noCheckerBetween(board.getCell(current.row+1, updateCol(current.column, goal.column)), goal);
     }
 
-
-
-    // Tranposing to the current checker
-    public void doTransposeOn(Checker checker){
-        doTranspose(checker.getPosition());
-    }
 //    @Override
 //    public void doTranspose(Cell cell){
 //        if(canTranspose(cell)){
@@ -119,13 +99,6 @@ public class WhiteChecker extends Checker{
         return false;
     }
 
-    @Override
-    public boolean canCrown(){
-        // Put a single checker on the current -> create stack where this is the bottom
-        // Can also occur NOW no possible crown but LATER on if single still on furthest row
-        // must immediately stack the new single onto the first row single while still turn
-        return this.position.row==board.getSize() && this.stack==null;
-    }
     // Checker that is crowning toCrown
 //    @Override
 //    public void doCrown(Cell toCrown){
@@ -165,13 +138,17 @@ public class WhiteChecker extends Checker{
   */
     @Override
     public boolean canSlide(Cell cell) {
-        return false;
+        return getPossibleSlide().contains(cell);
     }
 
     @Override
     public void slide(Cell cell) {
-        //
+        super.slide(cell);
+        if(mustCrown()){
+            this.mustCrown = true;
+        }
     }
+
 
     /**
      * @return all the possible cell positions the current piece can be in
@@ -217,5 +194,15 @@ public class WhiteChecker extends Checker{
             return null;
         }
         return board.getCell(current.row+1, current.column+1);
+    }
+
+    @Override
+    public boolean mustCrown() {
+        return super.mustCrown() && this.position.row==board.getSize();
+    }
+
+    @Override
+    public boolean canCrownWith(Checker checker) {
+        return super.canCrownWith(checker) && mustCrown();
     }
 }
