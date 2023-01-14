@@ -3,8 +3,7 @@ import com.sun.jdi.StackFrame;
 
 import java.awt.Color;
 import java.nio.charset.CharacterCodingException;
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.*;
 
 // To change
 public class Player {
@@ -99,65 +98,12 @@ public class Player {
         return true;
     }
 
-    /*
-            Bear-off
-            Crown
-     */
-    public void checkerOffBoard(Checker checker){
-        this.playingCheckers.remove(checker);
-    }
-    public void shouldCrown(Cell cell){
-        if(cell.getOccupyingStack()==null &&
-                cell.getOccupying()!=null &&
-                cell.getOccupying().getPlayer().equals(this)){
-            checkersToCrown.add(cell.getOccupying());
-            this.shouldCrown = true;
-        }
-        else{
-            System.out.println("Player can't crown");
-        }
-    }
-    // Checks whether there are available checkers other than current to crown
-    // For loop to see if there are not in stack :,(
-//    public boolean canCrown(){
-//        for(Checker playingChecker: playingCheckers){
-//            if(!checkersToCrown.contains(playingChecker) && playingChecker.stack==null){
-//                return true;
-//            }
-//        }
-//        return false;
-////        return this.playingCheckers.size()>
-//    }
-    public void crowning(Cell cellToCrown, Checker checker){
-        if(cellToCrown.getOccupyingStack()!=null && cellToCrown.getOccupying()!=null
-                && cellToCrown.getOccupying().getPlayer().equals(this)
-                && checker.getPlayer().equals(this)){
-            checkersToCrown.remove(cellToCrown.getOccupyingStack().bottomChecker);
-            this.stacks.add(new StackCheckers(cellToCrown.getOccupyingStack().bottomChecker.getBoard(),
-                    cellToCrown.getOccupyingStack().bottomChecker, checker));
-            this.shouldCrown = false;
-        }
-        else{
-            System.out.println("Can perform the crowning");
-        }
-    }
-
-    // Exist available moves
-//    public boolean availableMoves(){
-////        if(stacks.size()==0 && playingCheckers.size()==0){
-////            System.out.println("Player "+ this.playerIndex + "won!");
-////        }
-//        for(StackCheckers stack:stacks){
-//            if(stack)
-//        }
-//        return false;
-//    }
 
     /**
      * The checkers should not be on a stack
      * @return the list of all the possible checkers that could be used to crown
      */
-    public ArrayList<Checker> getSingleChecker(){
+    public ArrayList<Checker> getSingleCheckers(){
         ArrayList<Checker> singles = new ArrayList<>();
         for(Checker c: playingCheckers){
             if(c.stack==null){
@@ -173,13 +119,123 @@ public class Player {
      */
     public ArrayList<Checker> getCheckersToCrown(){
         ArrayList<Checker> singlesToCrown = new ArrayList<>();
-        for(Checker c: getSingleChecker()){
-            if(c.mustCrown){
+        for(Checker c: getSingleCheckers()){
+            if(c.mustCrown && c.mustCrown()){
                 singlesToCrown.add(c);
             }
         }
         return singlesToCrown;
     }
 
+    /**
+     *
+     * @return all the checkers and stacks that can make basic moevs
+     */
+    public ArrayList<Piece> getAllBasicMoves(){
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for(Checker c: playingCheckers){
+            if(c.stack==null && c.getPossibleSlide().size()>0){
+                pieces.add(c);
+            }
+        }
+        for(StackCheckers s: stacks){
+            if(s.getPossibleSlide().size()>0 || s.getPossibleTranspose().size()>0){
+                pieces.add(s);
+            }
+        }
+        return pieces;
+    }
 
+    /**
+     *
+     * @return all the checkers and stacks that can impasse
+     */
+    //TODO is it even useful?
+    public ArrayList<Piece> getAllImpasse(){
+        ArrayList<Piece> toImpasse = new ArrayList<>();
+        if(getAllBasicMoves().size()==0){
+            for(Checker c: playingCheckers){
+                if(c.stack==null){
+                    toImpasse.add(c);
+                }
+            }
+            for(StackCheckers s: stacks){
+                toImpasse.add(s);
+            }
+        }
+        return toImpasse;
+    }
+
+
+    public void notifyPlayer() {
+    }
+
+    public void notifyForCrowning() {
+
+    }
+
+
+    /**
+     * Could do in 2 ways
+     *      1) Take randomly a piece then select a random move
+     *      2) From all the possible moves select 1
+     */
+    public void makeMove(){
+        ArrayList<Piece> pieces = getAllBasicMoves();
+        if(pieces.size()==0){
+            //Impasse a random piece
+        }else{
+
+            // Get all the possible moves
+            HashMap<Piece, ArrayList<Cell>> possibleMoves = getBasicMoves(pieces);
+            for (Map.Entry<Piece, ArrayList<Cell>> entry : possibleMoves.entrySet()) {
+                Piece key = entry.getKey();
+                ArrayList<Cell> value = entry.getValue();
+                for(Cell c: value){
+                    System.out.println(key.getPosition().getID() + " : " + c.getID());
+
+                }
+            }
+
+
+
+//            // Randomly make a piece and make a move
+            Random rand = new Random();
+            int randomPiece = rand.nextInt(pieces.size());
+            Piece chosen = pieces.get(randomPiece);
+
+//            if(chosen instanceof StackCheckers){
+//                // Differentiate if transpose or slide
+//            }else if(chosen instanceof Checker){
+//                ArrayList<Cell> possibleSlides = chosen.getPossibleSlide();
+//                chosen.getPossibleSlide()
+//            }
+        }
+
+    }
+
+    /**
+     * Make a dictionary to store
+     *      Which piece is selected
+     *      What move can it make - next cell
+     */
+    public HashMap<Piece, ArrayList<Cell>> getBasicMoves(ArrayList<Piece> pieces){
+        // TODO dictionary
+        HashMap<Piece, ArrayList<Cell>> dictionary = new HashMap<>();
+        for(Piece p: pieces){
+            ArrayList<Cell> slides = p.getPossibleSlide();
+            dictionary.put(p, slides);
+            if(p instanceof StackCheckers){
+                ArrayList<Cell> transposes = p.getPossibleTranspose();
+                for(Cell transpose: transposes){
+                    dictionary.get(p).add(transpose);
+
+                }
+
+            }
+
+        }
+        return dictionary;
+
+    }
 }

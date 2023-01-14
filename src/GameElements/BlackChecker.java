@@ -5,16 +5,15 @@ import java.util.ArrayList;
 
 public class BlackChecker extends Checker{
 
-    static Color color = Color.BLACK;
+    final static Color color = Color.BLACK;
     public BlackChecker(Player player, Cell cell, Board board) {
         super(player, cell, board);
+
     }
-    public Color getColor(){    return this.color;}
+    public Color getColor(){
+        return this.color;
+    }
 
-
-    /*
-     The right methods for plays
-  */
     @Override
     public boolean canSlide(Cell cell) {
         return getPossibleSlide().contains(cell);
@@ -28,7 +27,6 @@ public class BlackChecker extends Checker{
             this.mustCrown = true;
         }
     }
-
 
     /**
      * @return all the possible cell positions the current piece can be in

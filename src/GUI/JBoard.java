@@ -25,7 +25,7 @@ public class JBoard extends JPanel {
     StackCheckers stackSelected;
     ArrayList<Cell> cellsToCrown = new ArrayList<>();
 
-    public JBoard(int size){
+    public JBoard(int size) throws CloneNotSupportedException {
         GamePlay gamePlay = new GamePlay(size, PlayerType.HUMAN, PlayerType.HUMAN);
         this.gamePlay = gamePlay;
         this.board = gamePlay.board;

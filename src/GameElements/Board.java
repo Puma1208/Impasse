@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Board {
+public class Board implements Cloneable{
+
     static final char[] LETTERS = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     private final Cell[][] cells;
     static int size;
@@ -15,26 +16,39 @@ public class Board {
     private ArrayList<StackCheckers> stacksWhite = new ArrayList<>();
     private ArrayList<StackCheckers> stacksBlack = new ArrayList<>();
 
+    Play play;
     static GamePlay gamePlay;
     static GameState gameState;
-    public boolean justBearOff=false;
-    Checker selectedToCrown;
 
-    public Board(GamePlay gp, int size, PlayerType type1, PlayerType type2){
+    boolean crowningCanHappen;
+
+    public Board(Play play, int size, PlayerType type1, PlayerType type2){
+        this.play = play;
+        this.size = size;
+        this.cells = initialiseBoard();
+        this.players = new Player[]{new Player(type1, Color.WHITE), new Player(type2, Color.BLACK)};
+        initialiseCheckers();
+    }
+
+    public Board(GamePlay gp, int size, PlayerType type1, PlayerType type2) throws CloneNotSupportedException {
         this.gamePlay = gp;
         gamePlay.addState(new GameState(this, gp.currentPlayer));
         this.gameState = gamePlay.gameStates.get(gamePlay.gameStates.size()-1);
         this.size = size;
-        this.cells = initialiseBoard(size);
+        this.cells = initialiseBoard();
         this.players = new Player[]{new Player(type1, Color.WHITE), new Player(type2, Color.BLACK)};
         // TODO method to update position
         this.checkers = new Checker[2][size][2]; // + (int)Math.ceil(size/2)];
         initialiseCheckers();
-        selectedToCrown = null;
 //        gamePlay = new GamePlay(new GameState(this));
     }
 
-    private Cell[][] initialiseBoard(int size){
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    private Cell[][] initialiseBoard(){
         // Include colors for cells
         Cell[][] cells = new Cell[size][size];
         for(int i=0; i<size;i++){
@@ -50,22 +64,15 @@ public class Board {
         return cells;
     }
 
-    public static Checker[][][] getCheckers(){
-        return checkers;
-    }
-
     public static int whiteCol(int row){
         int mod = row%4;
-        // testing for bigger boards
         int diff = size-2;
         return (2-(mod%2)) + ((mod/2)*diff);
     }
     public static int blackCol(int row){
         int mod = row%4;
-        // testing for bigger boards
         int diff = size-2;
         int toSubtract = (mod/2)*diff;
-//        return 8 - row%2 - toSubtract;
         return size - row%2 - toSubtract;
     }
 
@@ -79,6 +86,7 @@ public class Board {
             initialisePlayingPiece(black, black.getPlayer(), i);
         }
     }
+
     // Storing either checker at current position
     // Or storing the initial stack at current position
     public void initialisePlayingPiece(Checker checker, Player player, int index){
@@ -108,42 +116,43 @@ public class Board {
         return false;
     }
 
-    public boolean canCreateStack(Checker checker, Cell cell){
-        if(cell.getRow()>2 && checker.getColor()==Color.WHITE){
-            return true;
-        }
-        if(cell.getRow()<=2 && checker.getColor()==Color.BLACK){
-            return true;
-        }
-        return false;
+    public Cell[][] getCells(){
+        return cells;
     }
 
-    public Cell[][] getCells(){ return cells; }
-    public int getSize(){   return this.size; }
+    public int getSize(){
+        return this.size;
+    }
+
     // Get a cell from its row and column - not indexes
     public Cell getCell(int row, int column){
-//        System.out.println("row=" + row + "col=" + column) ;
+        if(row<=0||row>size){
+            System.out.println("Not possible to get the row " + row);
+        }
+        if(column<=0||column>size){
+            System.out.println("Not possible to get the column " + column);
+        }
         int updateRow = row-1;
         int updateColumn = column - 1;
         if(row<0){
             updateRow = 0;
         }
-        if(row>7){
-            updateRow = 7;
+        if(row>size-1){
+            updateRow = size-1;
         }
         if(column<0){
             updateColumn = 0;
         }
-        if(column>7){
-            updateColumn = 7;
+        if(column>size-1){
+            updateColumn = size-1;
         }
-//        System.out.println("uRow=" + updateRow + "uCol=" + updateColumn + ">>>>" + cells[updateColumn][updateRow].getID()) ;
-
         return cells[updateColumn][updateRow];
     }
+
     public Cell getCell(int row, char col){
         return getCell(row, stringColToIndex(col));
     }
+
     public int stringColToIndex(char col){
         List<Character> letters = new ArrayList<>();
         for(char c: LETTERS){
@@ -155,41 +164,7 @@ public class Board {
         return -1;
 
     }
-    public void notifyToCrown(Checker checker) {
-        checker.getPlayer().checkersToCrown.add(checker);
-    }
 
-    public void notifyToBearOff(StackCheckers stack) {
-        stack.position.removeCurrentStack();
-        stack.player.removeTopCheckerFromBoard(stack);
-        justBearOff = true;
-    }
-
-//    public void slide(Cell from, Cell to){
-//        System.out.println("so we're sliding " + from.getID() + ">"+ to.getID());
-//
-//        if(from.isOccupied()){
-//
-//            if(from.getOccupyingStack()!=null){
-//                System.out.println("Stack chosen");
-//                if(from.getOccupyingStack().getPlayer().getPlayerIndex()!=this.gameState.current.getPlayerIndex()){
-//                    System.out.println("this player is not allowed to move the current stack");
-//                }else{ from.getOccupyingStack().doSlide(to);}
-//
-//            }else if(from.getOccupying()!=null){
-//                System.out.println("Checker chosen");
-//
-//                if(from.getOccupying().getPlayer().getPlayerIndex()!=this.gameState.current.getPlayerIndex()){
-//                    System.out.println("this player is not allowed to move the current stack");
-//                }else{ from.getOccupying().doSlide(to);}
-//
-//            }
-//        }
-//    }
-
-
-    public void playerNotifyCrown(){
-    }
 
 
 }

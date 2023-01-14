@@ -11,7 +11,7 @@ public class GamePlay {
     public Board board;
     Cell from = null;
 
-    public GamePlay(int size, PlayerType player1, PlayerType player2){
+    public GamePlay(int size, PlayerType player1, PlayerType player2) throws CloneNotSupportedException {
         ACTIONS.add("SLIDE");
         ACTIONS.add("TRANSPOSE");
         ACTIONS.add("CROWN");
@@ -101,7 +101,7 @@ public class GamePlay {
 //
 //
 //    }
-    public void actionPerformed(){
+    public void actionPerformed() throws CloneNotSupportedException {
         switchPlayers();
         if(currentPlayer.type==PlayerType.HUMAN){
             // Get input from GUI
@@ -183,6 +183,7 @@ public class GamePlay {
 //        }
 //
 //    }
+
 
 
 }

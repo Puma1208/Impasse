@@ -2,18 +2,23 @@ package GameElements;
 
 public class GameState {
 
-    Player[] players;
     final Board board;
-    Player current;
+    final Player current;
 
-    public GameState(Board board, Player current){
-        this.board = board;
-        this.players = board.players;
+    public GameState(Board board, Player current) throws CloneNotSupportedException {
+        this.board = (Board) board.clone();
         this.current = current;
     }
 
     public void setPlayer(PlayerType player){
 
+    }
+
+    public void stgShouldHappen(){
+        current.notifyPlayer();
+        if(this.board.crowningCanHappen){
+            current.notifyForCrowning();
+        }
     }
 
 

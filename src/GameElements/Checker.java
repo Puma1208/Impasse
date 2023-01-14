@@ -42,29 +42,7 @@ public abstract class Checker implements Piece{
         this.position = cell;
         this.position.setOccupation(this);
     }
-    public boolean areSameColor(Checker checker){   return this.getColor()==checker.getColor(); }
 
-    public boolean isTopChecker(){
-        if(this.position.getOccupyingStack()==null){
-            return false;
-        }
-        return this.position.getOccupyingStack().equals(this.stack)
-                && this.stack!=null
-                && this.stack.topChecker.equals(this);
-    }
-
-
-    // Used in methods where checking whether sliding is possible
-    // !!! Not updating the column variable of the object !!!
-    public static int updateCol(int currentCol, int goalCol){
-        if(currentCol < goalCol){
-            return currentCol+1;
-        }
-        if(currentCol > goalCol){
-            return currentCol-1;
-        }
-        return currentCol;
-    }
     public void putOnStack(StackCheckers stackCheckers) {
         this.position = stackCheckers.position;
         this.stack = stackCheckers;
@@ -136,6 +114,7 @@ public abstract class Checker implements Piece{
         if(canCrownWith(checker)){
             new StackCheckers(board, this, checker);
             this.mustCrown = false;
+            checker.selectedToCrown = false;
         }
     }
 

@@ -21,10 +21,7 @@ public class Cell {
     public Cell(int column, int row){
         this.column = column;
         this.row = row;
-        // Set the final string ID
         id = convertColToLetter() + String.valueOf(row);
-        // Set the final color for the cell that will not change
-        // >> make it work when the color is final
         this.color = setColor();
         this.occupied = false;
         this.occupying = null;
@@ -32,7 +29,6 @@ public class Cell {
         this.needToCrown = false;
     }
 
-    // Only use after initialising with the position
     public String getID(){
         return id;
     }
@@ -95,40 +91,7 @@ public class Cell {
         return occupyingStack;
     }
 
-    // Keep bottom checker on current cell and remove stack from current position
-    public void removeCurrentStack(){
-        if(this.getOccupyingStack()!=null){// && occupied){
-            this.occupying = occupyingStack.bottomChecker;
-            setOccupation(occupyingStack.bottomChecker);
-            this.occupyingStack=null;
-        }
-    }
-//    public void needToCrown(){
-////        if(occupied && occupyingStack==null && occupying!=null){
-////            // 0 = White
-////            if(occupying.getPlayer().getPlayerIndex()==0){
-////                needToCrown = (this.row==)
-////            }
-////        }
-//        if(this.occupying!=null && this.occupyingStack==null){
-//            this.needToCrown= getOccupying().canCrown;
-//
-//        }
-//    }
-    public void crownDone(){
-        this.needToCrown = false;
-    }
-    public boolean toCrown(){
-        return needToCrown;
-    }
 
-//    public void getAvailableSlide(Checker checker){
-//        ArrayList<Cell> canSlide = new ArrayList<>();
-//        if(checker.getColor()==Color.BLACK){
-//            int row;
-//            for()
-//        }
-//    }
 
 
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 // Extended by stack and checker
 public interface Piece {
 
-
+    Cell getPosition();
     boolean canImpasse();
     void impasse();
     boolean canSlide(Cell cell);

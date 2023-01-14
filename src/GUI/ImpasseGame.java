@@ -4,7 +4,7 @@ import GameElements.GamePlay;
 import GameElements.PlayerType;
 
 public class ImpasseGame {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
 
 
         new GameFrame(8);

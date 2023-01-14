@@ -6,7 +6,7 @@ import GUI.JBoard;
 import java.awt.*;
 
 public class Testing {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
 
         Player p = new Player(PlayerType.AI, Color.WHITE);
 
@@ -82,14 +82,23 @@ public class Testing {
 
         d2.getOccupyingStack().slide(c3);
         e3.getOccupyingStack().slide(d2);
-        d2.getOccupyingStack().transpose(e1);
+//        d2.getOccupyingStack().transpose(e1);
 
-        System.out.println(e1.getID() + " " + e1.getOccupyingStack() + " "+ e1.getOccupyingStack().bottomChecker.stack + " " + e1.getOccupyingStack().topChecker.stack);
-        System.out.println(d2.getID() + " " + d2.getOccupying().stack );
+//        System.out.println(e1.getID() + " " + e1.getOccupyingStack() + " "+ e1.getOccupyingStack().bottomChecker.stack + " " + e1.getOccupyingStack().topChecker.stack);
+//        System.out.println(d2.getID() + " " + d2.getOccupying().stack );
 
 //        e3.getOccupyingStack().slide(c1);
 //        e3.getOccupyingStack().setPosition(c1);
 //        c1.getOccupyingStack().bearOff();
+
+
+        System.out.println("testing to get possible moves");
+        System.out.println("Player 1");
+        b.players[0].makeMove();
+        System.out.println();
+        System.out.println("Player 2");
+        b.players[1].makeMove();
+
         JBoard jb = new JBoard(b);
         new GameFrame(jb);
 

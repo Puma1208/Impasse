@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class GameFrame extends JFrame {
 
-    GameFrame(int size){
+    GameFrame(int size) throws CloneNotSupportedException {
 //        this.add(new JBoard(size));
         this.add(new JBoard(size));
         this.setTitle("Impasse 👾");
