@@ -62,6 +62,7 @@ public abstract class Checker implements Piece{
         this.player.removeChecker(this);
         if(this.stack==null){
             this.position.setUnoccupied();
+            notifyMoved();
         }
         //TODO - if stack not null -> error
 
@@ -71,6 +72,7 @@ public abstract class Checker implements Piece{
     public void slide(Cell cell) {
         if(canSlide(cell)){
             setPosition(cell);
+            notifyMoved();
         }
     }
 
@@ -137,6 +139,18 @@ public abstract class Checker implements Piece{
         checker.crown(this);
     }
 
+
+    /**
+     * To put in a method when  a slide
+     * a transpose
+     * an impasse
+     * was performed
+     */
+    @Override
+    public void notifyMoved()  {
+        this.player.deSelectedPiece();
+        board.play.playerMoved();
+    }
 
 }
 

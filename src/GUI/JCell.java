@@ -2,6 +2,7 @@ package GUI;
 
 
 import GameElements.Cell;
+import GameElements.Piece;
 
 import javax.swing.*;
 import java.awt.*;
@@ -83,7 +84,17 @@ public class JCell extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-//        jboard.cellNotifying(this);
+        Piece occupying = cell.getOccupyingPiece();
+        if(occupying!=null){
+            if(occupying.getPlayer()==jboard.board.play.getCurrentPlayer()){
+                occupying.getPlayer().notifySelectPiece(occupying);
+            } else {
+                System.out.println("Piece at " + cell.getID() + " is not a piece of the current player");
+            }
+        }
+        else{
+            jboard.board.play.getCurrentPlayer().notifySelectedCell(cell);
+        }
     }
 
     @Override

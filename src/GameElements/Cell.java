@@ -38,8 +38,6 @@ public class Cell {
     }
 
     public Color setColor(){
-//        if((this.row+this.column)%2==1){    return Color.WHITE;   }
-//        else{   return Color.BLACK; }
         if((this.row+this.column)%2==1){    return Color.LIGHT_GRAY;   }
         else{   return Color.DARK_GRAY; }
     }
@@ -91,6 +89,14 @@ public class Cell {
         return occupyingStack;
     }
 
+    public Piece getOccupyingPiece(){
+        if(this.occupyingStack!=null){
+            return this.occupyingStack;
+        }if(this.occupying!=null){
+            return this.occupying;
+        }
+        return null;
+    }
 
 
 

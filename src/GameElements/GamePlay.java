@@ -11,7 +11,8 @@ public class GamePlay {
     public Board board;
     Cell from = null;
 
-    public GamePlay(int size, PlayerType player1, PlayerType player2) throws CloneNotSupportedException {
+    public GamePlay(int size, PlayerType player1, PlayerType player2)
+    {
         ACTIONS.add("SLIDE");
         ACTIONS.add("TRANSPOSE");
         ACTIONS.add("CROWN");
@@ -19,16 +20,16 @@ public class GamePlay {
         ACTIONS.add("IMPASSE");
 
         this.board = new Board(this, 8, player1, player2);
-        currentPlayer = board.players[0];
+//        currentPlayer = board.players[0];
 
-        GameState gameState = new GameState(this.board, currentPlayer);
+//        GameState gameState = new GameState(this.board, currentPlayer);
 //        GameState gameState = new GameState(new Board(8,
 //                PlayerType.AI,
 //                PlayerType.HUMAN),
 //                board.players[0]);
 //        currentPlayer =
 //        ininitalState.setPlayer(currentPlayer);
-        gameStates.add(gameState);
+//        gameStates.add(gameState);
 //        startGame();
 
     }
@@ -101,8 +102,8 @@ public class GamePlay {
 //
 //
 //    }
-    public void actionPerformed() throws CloneNotSupportedException {
-        switchPlayers();
+    public void actionPerformed() {
+//        switchPlayers();
         if(currentPlayer.type==PlayerType.HUMAN){
             // Get input from GUI
 
@@ -110,7 +111,7 @@ public class GamePlay {
         if(currentPlayer.type==PlayerType.AI){
             // get input from ai
         }
-        GameState gs = new GameState(gameStates.get(gameStates.size()-1).board, currentPlayer);
+//        GameState gs = new GameState(gameStates.get(gameStates.size()-1).board, currentPlayer);
 
     }
     public void addState(GameState state){
@@ -124,13 +125,13 @@ public class GamePlay {
 
         }
     }
-    public void switchPlayers(){
-        if(currentPlayer.getPlayerIndex()==0){
-            currentPlayer = board.players[1];
-        }else if(currentPlayer.getPlayerIndex()==1){
-            currentPlayer = board.players[0];
-        }
-    }
+//    public void switchPlayers(){
+//        if(currentPlayer.getPlayerIndex()==0){
+//            currentPlayer = board.players[1];
+//        }else if(currentPlayer.getPlayerIndex()==1){
+//            currentPlayer = board.players[0];
+//        }
+//    }
 
 //    public void makeAction(){
 //        scanner = new Scanner(System.in);

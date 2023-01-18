@@ -16,11 +16,11 @@ public class State {
 
     public Board getBoard(){    return this.board; }
 
-    public void evaluateState(){
-        ArrayList<Checker> whiteCheckers = board.players[0].playingCheckers;
-        ArrayList<Checker> blackCheckers = board.players[1].playingCheckers;
-        ArrayList<StackCheckers> whiteStacks = board.players[0].stacks;
-        ArrayList<StackCheckers> blackStacks = board.players[1].stacks;
-        evaluationValue = 0;
-    }
+//    public void evaluateState(){
+//        ArrayList<Checker> whiteCheckers = board.players[0].playingCheckers;
+//        ArrayList<Checker> blackCheckers = board.players[1].playingCheckers;
+//        ArrayList<StackCheckers> whiteStacks = board.players[0].stacks;
+//        ArrayList<StackCheckers> blackStacks = board.players[1].stacks;
+//        evaluationValue = 0;
+//    }
 }

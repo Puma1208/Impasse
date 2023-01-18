@@ -1,5 +1,5 @@
 package GameElements;
 
 public enum PlayerType {
-    AI, HUMAN;
+    AI, RANDOM, HUMAN;
 }

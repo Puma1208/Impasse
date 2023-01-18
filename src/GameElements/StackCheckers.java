@@ -34,6 +34,12 @@ public class StackCheckers implements Piece{
     }
     public Color getColor(){    return color; }
     public Player getPlayer(){   return player;}
+
+    @Override
+    public Board getBoard() {
+        return board;
+    }
+
     public Cell getPosition(){  return position; }
 
     public void setPosition(Cell cell){
@@ -80,6 +86,7 @@ public class StackCheckers implements Piece{
             }
             // Available to crown from previous turn
             // Little tricky for after impasse to crown and available to crown
+            notifyMoved();
         }
         else{
             System.out.println("Can't impasse stack at " + this.position.getID());
@@ -108,6 +115,7 @@ public class StackCheckers implements Piece{
                 System.out.println("Must crown checker at " + this.position.getID());
                 this.bottomChecker.mustCrown = true;
             }
+            notifyMoved();
         }else{
             System.out.println("Can't slide stack at " + this.position.getID() +"  to " + cell.getID());
         }
@@ -117,7 +125,7 @@ public class StackCheckers implements Piece{
     /**
      *
      * @param cell to which check the transpose from the current stack
-     * @return if can tranpose on cel that is difference 1 on the diagonal
+     * @return if can transpose on cel that is difference 1 on the diagonal
      *          and the cell has 1 checker
      */
     @Override
@@ -149,6 +157,7 @@ public class StackCheckers implements Piece{
             this.position.setUnoccupied();
             this.position.setOccupation(this.bottomChecker);
             bearOff();
+            notifyMoved();
         }
         else{
             System.out.println("Can't transpose stack at " + this.position.getID());
@@ -270,6 +279,9 @@ public class StackCheckers implements Piece{
         return false;
     }
 
+
+
+
     /**
      * Check if the current stack is in the nearest row
      * with respect to the current player
@@ -292,8 +304,6 @@ public class StackCheckers implements Piece{
             this.position.setUnoccupied();
             this.position.setOccupation(this.bottomChecker);
             this.player.removeTopChecker(this);
-
-
             //Available to crown from previous turn
             if(this.player.getCheckersToCrown().size()>0){
                 this.bottomChecker.selectedToCrown = true;
@@ -303,5 +313,18 @@ public class StackCheckers implements Piece{
             System.out.println("Can't bear-off stack at " + this.position.getID());
         }
     }
+
+    /**
+     * To put in a method when  a slide
+     * a transpose
+     * an impasse
+     * was performed
+     */
+    @Override
+    public void notifyMoved() {
+        board.play.playerMoved();
+    }
+
+
 
 }

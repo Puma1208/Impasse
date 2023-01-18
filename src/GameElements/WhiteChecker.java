@@ -14,7 +14,6 @@ public class WhiteChecker extends Checker{
         return this.color;
     }
 
-
     @Override
     public boolean canSlide(Cell cell) {
         return getPossibleSlide().contains(cell);

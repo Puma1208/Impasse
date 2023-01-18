@@ -1,13 +1,11 @@
 package GameElements;
-import com.sun.jdi.StackFrame;
-
 import java.awt.Color;
-import java.nio.charset.CharacterCodingException;
 import java.util.*;
 
-// To change
-public class Player {
+public abstract class Player {
 
+
+    static Board board;
     PlayerType type;
     int score = 0;
     Color color;
@@ -19,12 +17,29 @@ public class Player {
     boolean shouldCrown;
     private final int playerIndex;
 
+    private Piece selectedPiece;
+    private Cell selectedCell;
+
+    public boolean moved;
 
     public Player(PlayerType type, Color color){
         this.type = type;
         this.color = color;
         this.shouldCrown = false;
+        this.selectedPiece = null;
+        this.selectedCell = null;
+        moved = false;
         playerIndex = indexFromColor();
+    }
+
+    public static void setBoard(Board b){
+        board = b;
+    }
+    public static Player createPlayer(PlayerType type, Color color){
+        if(type==PlayerType.RANDOM){
+            return new RandomPlayer(color);
+        }
+        else return new HumanPlayer(type, color);
     }
 
     public int indexFromColor(){
@@ -65,6 +80,7 @@ public class Player {
         this.stacks.remove(stack);
     }
 
+
     public void removeTopChecker(StackCheckers stack){
         removeChecker(stack.topChecker);
         this.stacks.remove(stack);
@@ -75,7 +91,7 @@ public class Player {
     public boolean shouldImpasse(){
         for(Checker checker:playingCheckers){
             if(checker.stack==null && checker.getPossibleSlide().size()>0){
-                System.out.println("checker at " + checker.position.getID() + " can slide to");
+//                System.out.println("checker at " + checker.position.getID() + " can slide to");
                 for(Cell c: checker.getPossibleSlide()){
                     System.out.println("    " + c.getID());
                 }
@@ -84,12 +100,12 @@ public class Player {
         }
         for(StackCheckers stack:stacks){
             if(stack.getPossibleSlide().size()>0 || stack.getPossibleTranspose().size()>0){
-                System.out.println("stack at " + stack.position.getID() + " can slide to");
+//                System.out.println("stack at " + stack.position.getID() + " can slide to");
                 for(Cell c: stack.getPossibleSlide()){
-                    System.out.println("    " + c.getID());
+//                    System.out.println("    " + c.getID());
                 }
                 for(Cell c: stack.getPossibleTranspose()){
-                    System.out.println("    transpose to " + c.getID());
+//                    System.out.println("    transpose to " + c.getID());
                 }
                 return false;
 
@@ -128,114 +144,134 @@ public class Player {
     }
 
     /**
+     * Either chosen    for later slide
+     *                  for transposing now
+     *                  for impasse now
+     * SelectedPiece null       -> Impasse
+     *                          -> SelectedPiece is piece
+     * SelectedPiece Checker    -> Checker:     switch
+     *                          -> Stack:       switch
+     * SelectedPiece Stack      -> Checker:     transpose or switch
+     *                          -> Stack:       switch
      *
-     * @return all the checkers and stacks that can make basic moevs
+     * @param piece
      */
-    public ArrayList<Piece> getAllBasicMoves(){
-        ArrayList<Piece> pieces = new ArrayList<>();
-        for(Checker c: playingCheckers){
-            if(c.stack==null && c.getPossibleSlide().size()>0){
-                pieces.add(c);
+    public void notifySelectPiece(Piece piece) {
+        if(this.selectedPiece!=null){
+            if(this.selectedPiece instanceof StackCheckers && piece instanceof Checker) {
+                this.selectedPiece.transpose(((Checker) piece).position);
+            }else{
+                this.selectedPiece = piece;
+            }
+        }else{
+            if(shouldImpasse()){
+                piece.impasse();
+            }
+            else{
+                this.selectedPiece = piece;
             }
         }
-        for(StackCheckers s: stacks){
-            if(s.getPossibleSlide().size()>0 || s.getPossibleTranspose().size()>0){
-                pieces.add(s);
-            }
-        }
-        return pieces;
     }
 
     /**
-     *
-     * @return all the checkers and stacks that can impasse
+     * Empty cell   to slide now
+     * @param cell
      */
-    //TODO is it even useful?
-    public ArrayList<Piece> getAllImpasse(){
-        ArrayList<Piece> toImpasse = new ArrayList<>();
-        if(getAllBasicMoves().size()==0){
-            for(Checker c: playingCheckers){
-                if(c.stack==null){
-                    toImpasse.add(c);
-                }
-            }
-            for(StackCheckers s: stacks){
-                toImpasse.add(s);
-            }
+    public void notifySelectedCell(Cell cell){
+        this.selectedCell = cell;
+        if(this.selectedPiece !=null){
+            selectedPiece.slide(cell);
         }
-        return toImpasse;
     }
-
-
-    public void notifyPlayer() {
-    }
-
     public void notifyForCrowning() {
 
     }
 
 
-    /**
-     * Could do in 2 ways
-     *      1) Take randomly a piece then select a random move
-     *      2) From all the possible moves select 1
-     */
-    public void makeMove(){
-        ArrayList<Piece> pieces = getAllBasicMoves();
-        if(pieces.size()==0){
-            //Impasse a random piece
-        }else{
-
-            // Get all the possible moves
-            HashMap<Piece, ArrayList<Cell>> possibleMoves = getBasicMoves(pieces);
-            for (Map.Entry<Piece, ArrayList<Cell>> entry : possibleMoves.entrySet()) {
-                Piece key = entry.getKey();
-                ArrayList<Cell> value = entry.getValue();
-                for(Cell c: value){
-                    System.out.println(key.getPosition().getID() + " : " + c.getID());
-
-                }
-            }
-
-
-
-//            // Randomly make a piece and make a move
-            Random rand = new Random();
-            int randomPiece = rand.nextInt(pieces.size());
-            Piece chosen = pieces.get(randomPiece);
-
-//            if(chosen instanceof StackCheckers){
-//                // Differentiate if transpose or slide
-//            }else if(chosen instanceof Checker){
-//                ArrayList<Cell> possibleSlides = chosen.getPossibleSlide();
-//                chosen.getPossibleSlide()
-//            }
-        }
-
-    }
 
     /**
      * Make a dictionary to store
      *      Which piece is selected
      *      What move can it make - next cell
      */
-    public HashMap<Piece, ArrayList<Cell>> getBasicMoves(ArrayList<Piece> pieces){
-        // TODO dictionary
+    public HashMap<Piece, ArrayList<Cell>> getBasicMoves(){
         HashMap<Piece, ArrayList<Cell>> dictionary = new HashMap<>();
-        for(Piece p: pieces){
+        for(Piece p: this.playingCheckers){
+            ArrayList<Cell> possiblePos = new ArrayList<>();
             ArrayList<Cell> slides = p.getPossibleSlide();
-            dictionary.put(p, slides);
-            if(p instanceof StackCheckers){
-                ArrayList<Cell> transposes = p.getPossibleTranspose();
-                for(Cell transpose: transposes){
-                    dictionary.get(p).add(transpose);
-
-                }
-
+            for(Cell slide: slides){
+                possiblePos.add(slide);
             }
+            dictionary.put(p, possiblePos);
 
+        }
+        for(Piece p: this.stacks){
+            ArrayList<Cell> possiblePos = new ArrayList<>();
+            ArrayList<Cell> slides = p.getPossibleSlide();
+            for(Cell slide: slides){
+                possiblePos.add(slide);
+            }
+            ArrayList<Cell> transposes = p.getPossibleTranspose();
+            for(Cell transpose: transposes){
+                possiblePos.add(transpose);
+            }
+            dictionary.put(p, possiblePos);
         }
         return dictionary;
 
+    }
+
+    /**
+     * After the player has decided to
+     *      impasse - because no choice
+     *      slide a single
+     *      slide a double
+     *      transpose
+     * he can have other moves available
+     */
+    public void execute(Piece p, Cell goal){
+        // Check for impasse
+        if(p.getPosition()==goal){
+            p.impasse();
+            if(p.getPlayer().getCheckersToCrown().size()>0){
+                notifyForCrowning();
+                GamePlay gamePlay = p.getBoard().gamePlay;
+            }
+        }
+        // Check if stack   -> slide
+        //                  -> transpose
+        //          checker -> slide
+        else
+        {
+            if(p instanceof StackCheckers){
+                if(p.canTranspose(goal)){
+                    p.transpose(goal);
+                }
+                else if (p.canSlide(goal)){
+                    p.slide(goal);
+                }
+            }else if(p instanceof Checker){
+                if(p.canSlide(goal)){
+                    p.slide(goal);
+                }
+            }
+        }
+
+        // If current was stack and became single -> must be crowned
+        // After bear-off or impasse can crown if still exist by current if became single
+
+
+    }
+
+
+    /**
+     * Make a basic move by choosing a piece and if needed (not impasse) an empty cell
+     */
+    public void makeMove() {
+
+    }
+
+    public void deSelectedPiece(){
+        this.selectedPiece = null;
     }
 }
