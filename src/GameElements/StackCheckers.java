@@ -109,6 +109,7 @@ public class StackCheckers implements Piece{
     @Override
     public void slide(Cell cell) {
         if(canSlide(cell)){
+            System.out.println("SLIDE from " + this.position.getID() + " to " + cell.getID() );
             setPosition(cell);
             bearOff();
             if(this.bottomChecker.mustCrown()){
@@ -151,6 +152,7 @@ public class StackCheckers implements Piece{
     @Override
     public void transpose(Cell cell) {
         if(canTranspose(cell)){
+            System.out.println("TRANSPOSING from " + this.position.getID() + " to " + cell.getID());
             this.bottomChecker.stack = null;
             this.player.removeStack(this);
             new StackCheckers(board, cell.getOccupying(), this.topChecker);
@@ -301,6 +303,7 @@ public class StackCheckers implements Piece{
      */
     public void bearOff(){
         if(canBearOff()){
+            System.out.println("BEAR-OFF stack at " + this.position.getID());
             this.position.setUnoccupied();
             this.position.setOccupation(this.bottomChecker);
             this.player.removeTopChecker(this);
@@ -322,6 +325,7 @@ public class StackCheckers implements Piece{
      */
     @Override
     public void notifyMoved() {
+        this.player.deSelectedPiece();
         board.play.playerMoved();
     }
 

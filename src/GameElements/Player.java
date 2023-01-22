@@ -17,8 +17,8 @@ public abstract class Player {
     boolean shouldCrown;
     private final int playerIndex;
 
-    private Piece selectedPiece;
-    private Cell selectedCell;
+    protected Piece selectedPiece;
+    protected Cell selectedCell;
 
     public boolean moved;
 
@@ -92,9 +92,9 @@ public abstract class Player {
         for(Checker checker:playingCheckers){
             if(checker.stack==null && checker.getPossibleSlide().size()>0){
 //                System.out.println("checker at " + checker.position.getID() + " can slide to");
-                for(Cell c: checker.getPossibleSlide()){
-                    System.out.println("    " + c.getID());
-                }
+//                for(Cell c: checker.getPossibleSlide()){
+//                    System.out.println("    " + c.getID());
+//                }
                 return false;
             }
         }
@@ -158,10 +158,13 @@ public abstract class Player {
      */
     public void notifySelectPiece(Piece piece) {
         if(this.selectedPiece!=null){
-            if(this.selectedPiece instanceof StackCheckers && piece instanceof Checker) {
+            if(this.selectedPiece instanceof StackCheckers && piece instanceof Checker
+                    && this.selectedPiece.canTranspose(((Checker) piece).position)) {
                 this.selectedPiece.transpose(((Checker) piece).position);
             }else{
                 this.selectedPiece = piece;
+                System.out.println("________Selected piece by the player " + this.selectedPiece.getPosition().getID());
+
             }
         }else{
             if(shouldImpasse()){
@@ -169,8 +172,13 @@ public abstract class Player {
             }
             else{
                 this.selectedPiece = piece;
+                System.out.println("________SELECTED piece by the player " + this.selectedPiece.getPosition().getID());
+
             }
         }
+//        System.out.println("Selected piece by the player " + this.selectedPiece);
+
+
     }
 
     /**
@@ -181,7 +189,10 @@ public abstract class Player {
         this.selectedCell = cell;
         if(this.selectedPiece !=null){
             selectedPiece.slide(cell);
+
         }
+        System.out.println("||||||||Selected cell by the player " + this.selectedPiece);
+
     }
     public void notifyForCrowning() {
 
@@ -222,47 +233,30 @@ public abstract class Player {
     }
 
     /**
-     * After the player has decided to
-     *      impasse - because no choice
-     *      slide a single
-     *      slide a double
-     *      transpose
-     * he can have other moves available
+     * Make a dictionary to store
+     *      Which piece is selected
+     *      What move can it make - next cell
      */
-    public void execute(Piece p, Cell goal){
-        // Check for impasse
-        if(p.getPosition()==goal){
-            p.impasse();
-            if(p.getPlayer().getCheckersToCrown().size()>0){
-                notifyForCrowning();
-                GamePlay gamePlay = p.getBoard().gamePlay;
-            }
-        }
-        // Check if stack   -> slide
-        //                  -> transpose
-        //          checker -> slide
-        else
-        {
-            if(p instanceof StackCheckers){
-                if(p.canTranspose(goal)){
-                    p.transpose(goal);
-                }
-                else if (p.canSlide(goal)){
-                    p.slide(goal);
-                }
-            }else if(p instanceof Checker){
-                if(p.canSlide(goal)){
-                    p.slide(goal);
+    public ArrayList<Move> getMoves(){
+        ArrayList<Move> moves = new ArrayList<>();
+        for(Checker p: this.playingCheckers){
+            if(p.stack == null){
+                for(Cell slide: p.getPossibleSlide()){
+                    moves.add(new Move(p, slide));
                 }
             }
         }
-
-        // If current was stack and became single -> must be crowned
-        // After bear-off or impasse can crown if still exist by current if became single
-
+        for(Piece p: this.stacks){
+            for(Cell slide: p.getPossibleSlide()){
+                moves.add(new Move(p, slide));
+            }
+            for(Cell transpose: p.getPossibleTranspose()){
+                moves.add(new Move(p, transpose));
+            }
+        }
+        return moves;
 
     }
-
 
     /**
      * Make a basic move by choosing a piece and if needed (not impasse) an empty cell
@@ -273,5 +267,6 @@ public abstract class Player {
 
     public void deSelectedPiece(){
         this.selectedPiece = null;
+        this.selectedCell = null;
     }
 }

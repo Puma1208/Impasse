@@ -18,6 +18,9 @@ public class Board implements Cloneable{
     static GamePlay gamePlay;
     static GameState gameState;
 
+    Cell from;
+    Cell to;
+
     public Board(Play play, int size, PlayerType type1, PlayerType type2){
         this.play = play;
         this.size = size;
@@ -26,6 +29,8 @@ public class Board implements Cloneable{
         this.players[0].setBoard(this);
         this.players[1].setBoard(this);
         initialiseCheckers();
+        from = null;
+        to = null;
     }
 
     public Board(GamePlay gp, int size, PlayerType type1, PlayerType type2)  {
@@ -167,6 +172,48 @@ public class Board implements Cloneable{
         return -1;
 
     }
+
+    public void setCellsPossible(ArrayList<Cell> slides){
+        for(Cell c:slides){
+            c.isPossibleSlide = true;
+        }
+    }
+
+    /**
+     * After a player has moved - no need to show possible slides
+     * TODO: to speed up - only cells that have been possible for the selected checker
+     */
+    public void notSlide(){
+        for(Cell[] row: this.cells){
+            for(Cell c: row){
+                c.isPossibleSlide = false;
+            }
+        }
+    }
+
+    public void setCellsTranspose(ArrayList<Cell> slides){
+        for(Cell c:slides){
+            c.isPossibleTranspose = true;
+        }
+    }
+
+    public void notTranspose(){
+        for(Cell[] row: this.cells){
+            for(Cell c: row){
+                c.isPossibleTranspose = false;
+            }
+        }
+    }
+
+    public void setNoBasicMove(){
+        for(Cell[] row: this.cells){
+            for(Cell c: row){
+                c.isPossibleSlide = false;
+                c.isPossibleTranspose = false;
+            }
+        }
+    }
+
 
 
 

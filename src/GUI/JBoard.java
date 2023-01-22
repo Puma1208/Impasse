@@ -63,6 +63,9 @@ public class JBoard extends JPanel {
             x = x + unitSize;
         }
     }
+    public void movedFromTo(Cell from, Cell to){
+
+    }
 
 }
 

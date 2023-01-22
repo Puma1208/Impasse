@@ -23,7 +23,7 @@ public class BlackChecker extends Checker{
     public void slide(Cell cell) {
         super.slide(cell);
         if(mustCrown()){
-            System.out.println("Must crown checker at " + this.position.getID());
+            System.out.println("    Must crown checker at " + this.position.getID());
             this.mustCrown = true;
         }
     }

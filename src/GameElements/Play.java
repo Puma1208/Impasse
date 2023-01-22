@@ -48,14 +48,18 @@ public class Play {
      * And updates to next player and next game state
      */
     public void playerMoved() {
+        board.notSlide();
         for(Player p:board.players){
             if(p.playingCheckers.size()==0 && p.stacks.size()==0){
                 System.out.println("Player " + p.color + " won!");
                 return;
             }
         }
+        board.setNoBasicMove();
+        board.notTranspose();
         updatePlayer();
         addGameState();
+        current.makeMove();
     }
 
     public void addGameState() {

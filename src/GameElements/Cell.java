@@ -17,6 +17,9 @@ public class Cell {
 
     boolean needToCrown;
 
+    public boolean isPossibleTranspose;
+    public boolean isPossibleSlide;
+
 
     public Cell(int column, int row){
         this.column = column;
@@ -27,6 +30,9 @@ public class Cell {
         this.occupying = null;
         this.occupyingStack = null;
         this.needToCrown = false;
+
+        this.isPossibleSlide = false;
+        this.isPossibleTranspose = false;
     }
 
     public String getID(){

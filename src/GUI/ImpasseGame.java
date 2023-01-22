@@ -7,7 +7,7 @@ public class ImpasseGame {
     public static void main(String[] args)  {
 
 
-        new GameFrame(8, PlayerType.HUMAN, PlayerType.HUMAN);
+        new GameFrame(8, PlayerType.HUMAN, PlayerType.RANDOM);
         int n = 5;
 
     }

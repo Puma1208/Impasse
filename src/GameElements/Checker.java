@@ -93,7 +93,7 @@ public abstract class Checker implements Piece{
      */
     @Override
     public ArrayList<Cell> getPossibleTranspose() {
-        return null;
+        return new ArrayList<>();
     }
 
 
