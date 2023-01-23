@@ -62,6 +62,7 @@ public abstract class Checker implements Piece{
         this.player.removeChecker(this);
         if(this.stack==null){
             this.position.setUnoccupied();
+            System.out.println("IMPASSE checker at " + this.position.getID());
             notifyMoved();
         }
         //TODO - if stack not null -> error
@@ -75,9 +76,6 @@ public abstract class Checker implements Piece{
             setPosition(cell);
             notifyMoved();
         }
-//        else{
-//            this.player.makeMove();
-//        }
     }
 
     @Override

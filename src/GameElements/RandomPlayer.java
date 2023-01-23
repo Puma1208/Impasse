@@ -52,12 +52,20 @@ public class RandomPlayer extends Player{
 //    }
 
 
+    /**
+     * 1) Check if need to impasse
+     * 2) If not make basic move
+     * 3) Check if a checker needs to be crowned + if can be crowned now
+     */
     @Override
     public void makeMove() {
         super.makeMove();
         ArrayList<Move> moves = getMoves();
         if(moves.size()==0){
-
+            ArrayList<Piece> impasse = getImpasse();
+            Random random = new Random();
+            int randomIndex = random.nextInt(impasse.size());
+            impasse.get(randomIndex).impasse();
         }else{
             Random rand = new Random();
             int randomIndex = rand.nextInt(moves.size());

@@ -62,10 +62,6 @@ public abstract class Player {
             playingCheckers.remove(checker);
         }
     }
-    public void removeTopCheckerFromBoard(StackCheckers stack){
-        removeChecker(stack.topChecker);
-        this.stacks.remove(stack);
-    }
     public void addChecker(Checker checker){
         this.playingCheckers.add(checker);
     }
@@ -84,31 +80,18 @@ public abstract class Player {
     public void removeTopChecker(StackCheckers stack){
         removeChecker(stack.topChecker);
         this.stacks.remove(stack);
+
     }
-
-
 
     public boolean shouldImpasse(){
         for(Checker checker:playingCheckers){
             if(checker.stack==null && checker.getPossibleSlide().size()>0){
-//                System.out.println("checker at " + checker.position.getID() + " can slide to");
-//                for(Cell c: checker.getPossibleSlide()){
-//                    System.out.println("    " + c.getID());
-//                }
                 return false;
             }
         }
         for(StackCheckers stack:stacks){
             if(stack.getPossibleSlide().size()>0 || stack.getPossibleTranspose().size()>0){
-//                System.out.println("stack at " + stack.position.getID() + " can slide to");
-                for(Cell c: stack.getPossibleSlide()){
-//                    System.out.println("    " + c.getID());
-                }
-                for(Cell c: stack.getPossibleTranspose()){
-//                    System.out.println("    transpose to " + c.getID());
-                }
                 return false;
-
             }
         }
         return true;
@@ -283,12 +266,16 @@ public abstract class Player {
         this.selectedCell = null;
     }
 
-    public void getImpasse(){
+    public ArrayList<Piece> getImpasse(){
         ArrayList<Piece> canImpasse = new ArrayList<>();
-        for(StackCheckers s: stacks){
-            if(s.canImpasse()){
-
+        if(shouldImpasse()){
+            for(StackCheckers stack: stacks){
+                canImpasse.add(stack);
+            }
+            for(Checker checker: playingCheckers){
+                canImpasse.add(checker);
             }
         }
+        return canImpasse;
     }
 }

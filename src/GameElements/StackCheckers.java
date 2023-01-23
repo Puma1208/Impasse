@@ -75,11 +75,13 @@ public class StackCheckers implements Piece{
      */
     @Override
     public void impasse() {
+        // Maybe no need to check if impasse to not waste time?
         if(canImpasse()){
             this.position.occupyingStack = null;
             this.position.setOccupation(this.bottomChecker);
             this.bottomChecker.stack = null;
             this.player.removeTopChecker(this);
+            System.out.println("IMPASSE Stack at " + this.position.getID());
             if(this.bottomChecker.mustCrown()){
                 System.out.println("Must crown checker at " + this.position.getID());
                 this.bottomChecker.mustCrown = true;
@@ -154,7 +156,8 @@ public class StackCheckers implements Piece{
         if(canTranspose(cell)){
             System.out.println("TRANSPOSING from " + this.position.getID() + " to " + cell.getID());
             this.bottomChecker.stack = null;
-            this.player.removeStack(this);
+//            this.player.removeStack(this);
+            this.player.stacks.remove(this);
             new StackCheckers(board, cell.getOccupying(), this.topChecker);
             this.position.setUnoccupied();
             this.position.setOccupation(this.bottomChecker);

@@ -52,6 +52,13 @@ public class Play {
     public void playerMoved() {
         board.notSlide();
         for(Player p:board.players){
+            System.out.println("__________Player " + p.color.toString() + "__________");
+            for(StackCheckers s: p.stacks){
+                System.out.println("                stack at " + s.position.getID());
+            }
+            for(Checker c: p.playingCheckers){
+                System.out.println("                checker at " + c.position.getID());
+            }
             if(p.playingCheckers.size()==0 && p.stacks.size()==0){
                 System.out.println("Player " + p.color + " won!");
                 return;
