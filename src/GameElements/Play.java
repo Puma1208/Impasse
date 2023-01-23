@@ -15,6 +15,7 @@ public class Play {
         current = this.board.players[0];
         GameState.setBoard(board);
         states.add(new GameState(current));
+        startGame();
     }
 
 
@@ -41,6 +42,7 @@ public class Play {
         }else if(current.getPlayerIndex()==1){
             current = board.players[0];
         }
+        System.out.println("----------------------- " + current.type + " ----------------------- " );
     }
 
     /**
@@ -70,6 +72,11 @@ public class Play {
 
     }
 
+    public void startGame(){
+        if(current.type != PlayerType.HUMAN){
+            current.makeMove();
+        }
+    }
 
 
 

@@ -56,13 +56,16 @@ public class RandomPlayer extends Player{
     public void makeMove() {
         super.makeMove();
         ArrayList<Move> moves = getMoves();
-//        for(Move m: moves){
-//            System.out.println("Piece " + m.piece.getPosition().getID() + " to " + m.cell.getID());
-//        }
-        Random rand = new Random();
-        int randomIndex = rand.nextInt(moves.size());
-        notifySelectPiece(moves.get(randomIndex).piece);
-        notifySelectedCell(moves.get(randomIndex).cell);
+        if(moves.size()==0){
+
+        }else{
+            Random rand = new Random();
+            int randomIndex = rand.nextInt(moves.size());
+            notifySelectPiece(moves.get(randomIndex).piece);
+            notifySelectedCell(moves.get(randomIndex).cell);
+        }
+//        if()
+
 
 
     }

@@ -112,10 +112,10 @@ public class StackCheckers implements Piece{
             System.out.println("SLIDE from " + this.position.getID() + " to " + cell.getID() );
             setPosition(cell);
             bearOff();
-            if(this.bottomChecker.mustCrown()){
-                System.out.println("Must crown checker at " + this.position.getID());
-                this.bottomChecker.mustCrown = true;
-            }
+//            if(this.bottomChecker.mustCrown()){
+//                System.out.println("Must crown checker at " + this.position.getID());
+//                this.bottomChecker.mustCrown = true;
+//            }
             notifyMoved();
         }else{
             System.out.println("Can't slide stack at " + this.position.getID() +"  to " + cell.getID());
@@ -158,7 +158,7 @@ public class StackCheckers implements Piece{
             new StackCheckers(board, cell.getOccupying(), this.topChecker);
             this.position.setUnoccupied();
             this.position.setOccupation(this.bottomChecker);
-            bearOff();
+            cell.getOccupyingStack().bearOff();
             notifyMoved();
         }
         else{
@@ -313,7 +313,7 @@ public class StackCheckers implements Piece{
             }
         }
         else{
-            System.out.println("Can't bear-off stack at " + this.position.getID());
+            System.out.println("    Can't bear-off stack at " + this.position.getID());
         }
     }
 

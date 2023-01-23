@@ -157,47 +157,60 @@ public abstract class Player {
      * @param piece
      */
     public void notifySelectPiece(Piece piece) {
-        if(this.selectedPiece!=null){
-            if(this.selectedPiece instanceof StackCheckers && piece instanceof Checker
-                    && this.selectedPiece.canTranspose(((Checker) piece).position)) {
-                this.selectedPiece.transpose(((Checker) piece).position);
-            }else{
-                this.selectedPiece = piece;
-                System.out.println("________Selected piece by the player " + this.selectedPiece.getPosition().getID());
-
-            }
+        if(this.selectedPiece!=null
+                && this.selectedPiece instanceof StackCheckers && piece instanceof Checker
+                && this.selectedPiece.canTranspose(((Checker) piece).position)) {
+            this.selectedPiece.transpose(((Checker) piece).position);
         }else{
             if(shouldImpasse()){
                 piece.impasse();
             }
             else{
                 this.selectedPiece = piece;
-                System.out.println("________SELECTED piece by the player " + this.selectedPiece.getPosition().getID());
-
             }
         }
-//        System.out.println("Selected piece by the player " + this.selectedPiece);
-
-
     }
 
     /**
-     * Empty cell   to slide now
+     * No selected piece before         Set selectedCell cell
+     * Already selected piece before    Checker         Slide if empty
+     *                                                  Change to newly selected piece
+     *                                  StackCheckers   Slide if empty
+     *                                                  Transpose if next selected is checker
+     *                                                  Change to newly selected piece
      * @param cell
      */
     public void notifySelectedCell(Cell cell){
-        this.selectedCell = cell;
-        if(this.selectedPiece !=null){
-            selectedPiece.slide(cell);
+        if(selectedPiece==null){
+            if(cell.isOccupied()){
+                notifySelectPiece(cell.getOccupyingPiece());
+            }
+        }else{
+            this.selectedCell = cell;
+            if(this.selectedPiece instanceof Checker){
+                if(!cell.isOccupied()){
+                    selectedPiece.slide(cell);
+                }else{
+                    notifySelectPiece(cell.getOccupyingPiece());
+                }
+            }
+            if(this.selectedPiece instanceof StackCheckers){
+                if(!cell.isOccupied()){
+                    selectedPiece.slide(cell);
+                }
+                else if(selectedPiece.canTranspose(cell)){
+                    selectedPiece.transpose(cell);
+                }
+                else{
+                    notifySelectPiece(cell.getOccupyingStack());
 
+                }
+            }
         }
-        System.out.println("||||||||Selected cell by the player " + this.selectedPiece);
-
     }
     public void notifyForCrowning() {
 
     }
-
 
 
     /**
@@ -268,5 +281,14 @@ public abstract class Player {
     public void deSelectedPiece(){
         this.selectedPiece = null;
         this.selectedCell = null;
+    }
+
+    public void getImpasse(){
+        ArrayList<Piece> canImpasse = new ArrayList<>();
+        for(StackCheckers s: stacks){
+            if(s.canImpasse()){
+
+            }
+        }
     }
 }

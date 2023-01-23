@@ -71,9 +71,13 @@ public abstract class Checker implements Piece{
     @Override
     public void slide(Cell cell) {
         if(canSlide(cell)){
+            System.out.println("SLIDE from " + this.position.getID() + " to " + cell.getID() );
             setPosition(cell);
             notifyMoved();
         }
+//        else{
+//            this.player.makeMove();
+//        }
     }
 
     @Override
