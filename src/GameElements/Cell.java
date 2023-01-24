@@ -59,6 +59,7 @@ public class Cell {
     }
     public void setOccupation(Checker checker) {
         this.occupied = true;
+        this.occupyingStack = null;
         this.occupying = checker;
     }
 

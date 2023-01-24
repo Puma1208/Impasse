@@ -10,7 +10,7 @@ public class ImpasseGame {
     public static void main(String[] args)  {
 
 //        new Play(8, PlayerType.RANDOM, PlayerType.RANDOM);
-        new GameFrame(4, PlayerType.RANDOM, PlayerType.RANDOM);
+        new GameFrame(4, PlayerType.HUMAN, PlayerType.RANDOM);
         int n = 5;
     }
 }

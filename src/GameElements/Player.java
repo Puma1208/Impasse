@@ -85,13 +85,13 @@ public abstract class Player {
 
     public boolean shouldImpasse(){
         for(Checker checker:playingCheckers){
-            System.out.println("Checker at " + checker.position.getID() + " " + checker.getPossibleSlide().size());
-            if(checker.stack==null && checker.getPossibleSlide().size()>0){
-                return false;
+            if(checker.stack==null){
+                if(checker.getPossibleSlide().size()>0){
+                    return false;
+                }
             }
         }
         for(StackCheckers stack:stacks){
-            System.out.println("Stack at " + stack.position.getID() + " " + stack.getPossibleSlide().size() + " " + (stack.getPossibleTranspose().size()>0));
             if(stack.getPossibleSlide().size()>0 || stack.getPossibleTranspose().size()>0){
                 return false;
             }
@@ -142,6 +142,8 @@ public abstract class Player {
      * @param piece
      */
     public void notifySelectPiece(Piece piece) {
+
+
         if(this.selectedPiece!=null
                 && this.selectedPiece instanceof StackCheckers && piece instanceof Checker
                 && this.selectedPiece.canTranspose(((Checker) piece).position)) {
@@ -151,6 +153,7 @@ public abstract class Player {
         }else{
             if(shouldImpasse()){
 //                System.out.println("ready for impasse");
+
                 piece.impasse();
             }
             else{

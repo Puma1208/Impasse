@@ -6,7 +6,7 @@ public class Play {
 
     public Board board;
     private Player current;
-    boolean gameStopped;
+    public boolean gameStopped;
 
     ArrayList<GameState> states;
 
@@ -14,7 +14,8 @@ public class Play {
         this.board = new Board(this, size, type1, type2);
         this.states = new ArrayList<>();
         this.gameStopped = false;
-        current = this.board.players[0];
+        current = this.board.players[1];
+        updatePlayer();
         GameState.setBoard(board);
         states.add(new GameState(current));
         startGame();
@@ -44,7 +45,8 @@ public class Play {
         }else if(current.getPlayerIndex()==1){
             current = board.players[0];
         }
-        System.out.println("----------------------- " + current.type + " ----------------------- " );
+        System.out.println("----------------------- " + current.type + " " + current.color + " ----------------------- " );
+
     }
 
     /**
@@ -52,20 +54,11 @@ public class Play {
      * And updates to next player and next game state
      */
     public void playerMoved() {
+        if(current.playingCheckers.size()==0 && current.stacks.size()==0){
+            stopGame();
+        }
         if(!gameStopped){
             board.notSlide();
-            for(Player p:board.players){
-//            for(StackCheckers s: p.stacks){
-//                System.out.println("                stack at " + s.position.getID());
-//            }
-//            for(Checker c: p.playingCheckers){
-//                System.out.println("                checker at " + c.position.getID());
-//            }
-                if(p.playingCheckers.size()==0 && p.stacks.size()==0){
-                    System.out.println("Player " + p.color + " won!");
-                    stopGame();
-                }
-            }
             board.setNoBasicMove();
             board.notTranspose();
             updatePlayer();
@@ -90,7 +83,7 @@ public class Play {
 
     public void stopGame(){
         gameStopped = true;
-        System.out.println("✨ PLAYER " + current.indexFromColor()  + " WON✨");
+        System.out.println("✨ PLAYER " + current.indexFromColor() + " " + current.color + " WON ✨");
     }
 
 
