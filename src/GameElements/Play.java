@@ -43,6 +43,7 @@ public class Play {
             current = board.players[0];
         }
         System.out.println("----------------------- " + current.type + " ----------------------- " );
+        System.out.println("----------------------- " + current.shouldImpasse() + " ----------------------- " );
     }
 
     /**
@@ -83,6 +84,7 @@ public class Play {
         if(current.type != PlayerType.HUMAN){
             current.makeMove();
         }
+        current.getMoves();
     }
 
 
