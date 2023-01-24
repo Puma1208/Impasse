@@ -91,8 +91,8 @@ public abstract class Player {
             }
         }
         for(StackCheckers stack:stacks){
-            System.out.println("Stack at " + stack.position.getID() + " " + stack.getPossibleSlide().size() + " " + stack.getPossibleTranspose().size());
-            if(stack.getPossibleSlide().size()>0 && stack.getPossibleTranspose().size()>0){
+            System.out.println("Stack at " + stack.position.getID() + " " + stack.getPossibleSlide().size() + " " + (stack.getPossibleTranspose().size()>0));
+            if(stack.getPossibleSlide().size()>0 || stack.getPossibleTranspose().size()>0){
                 return false;
             }
         }

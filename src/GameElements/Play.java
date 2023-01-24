@@ -84,7 +84,8 @@ public class Play {
         if(current.type != PlayerType.HUMAN){
             current.makeMove();
         }
-        current.getMoves();
+//        current.getMoves();
+        System.out.println("IIIIIIIIIIIIIIIIIIIIIII " + current.shouldImpasse());
     }
 
 

@@ -204,7 +204,7 @@ public class StackCheckers implements Piece{
                 Cell right = board.getCell(position.row-1, position.column+1);
                 if(canTranspose(right)){
                     transposeList.add(right);
-                    System.out.println("                                        White cam transpose from " + this.position.getID() + " to " + right.getID());
+                    System.out.println("                                        White can transpose from " + this.position.getID() + " to " + right.getID());
                 }
             }
             if(position.column>1){
@@ -223,7 +223,7 @@ public class StackCheckers implements Piece{
                 Cell left = board.getCell(this.position.row+1, this.position.column+1);
                 if(canTranspose(left)){
                     transposeList.add(left);
-                    System.out.println("                                        Black cam transpose from " + this.position.getID() + " to " + left.getID());
+                    System.out.println("                                        Black can transpose from " + this.position.getID() + " to " + left.getID());
 
                 }
             }
