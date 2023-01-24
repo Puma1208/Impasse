@@ -145,18 +145,16 @@ public abstract class Player {
         if(this.selectedPiece!=null
                 && this.selectedPiece instanceof StackCheckers && piece instanceof Checker
                 && this.selectedPiece.canTranspose(((Checker) piece).position)) {
-            System.out.println("ready for transpose");
+//            System.out.println("ready for transpose");
             this.selectedPiece.transpose(((Checker) piece).position);
 
         }else{
             if(shouldImpasse()){
-                System.out.println("ready for impasse");
-
+//                System.out.println("ready for impasse");
                 piece.impasse();
             }
             else{
-                System.out.println("Selected piece");
-
+//                System.out.println("Selected piece");
                 this.selectedPiece = piece;
             }
         }
@@ -281,7 +279,9 @@ public abstract class Player {
                 canImpasse.add(stack);
             }
             for(Checker checker: playingCheckers){
-                canImpasse.add(checker);
+                if(checker.stack==null){
+                    canImpasse.add(checker);
+                }
             }
         }
         return canImpasse;

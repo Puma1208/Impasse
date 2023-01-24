@@ -61,7 +61,8 @@ public class RandomPlayer extends Player{
     public void makeMove() {
         super.makeMove();
         ArrayList<Move> moves = getMoves();
-        if(moves.size()==0){
+//        if(moves.size()==0){
+        if(shouldImpasse()){
             ArrayList<Piece> impasse = getImpasse();
             Random random = new Random();
             int randomIndex = random.nextInt(impasse.size());

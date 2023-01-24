@@ -6,12 +6,14 @@ public class Play {
 
     public Board board;
     private Player current;
+    boolean gameStopped;
 
     ArrayList<GameState> states;
 
     public Play(int size, PlayerType type1, PlayerType type2)  {
         this.board = new Board(this, size, type1, type2);
         this.states = new ArrayList<>();
+        this.gameStopped = false;
         current = this.board.players[0];
         GameState.setBoard(board);
         states.add(new GameState(current));
@@ -43,7 +45,6 @@ public class Play {
             current = board.players[0];
         }
         System.out.println("----------------------- " + current.type + " ----------------------- " );
-        System.out.println("----------------------- " + current.shouldImpasse() + " ----------------------- " );
     }
 
     /**
@@ -51,25 +52,26 @@ public class Play {
      * And updates to next player and next game state
      */
     public void playerMoved() {
-        board.notSlide();
-        for(Player p:board.players){
-            System.out.println("__________Player " + p.color.toString() + "__________");
-            for(StackCheckers s: p.stacks){
-                System.out.println("                stack at " + s.position.getID());
+        if(!gameStopped){
+            board.notSlide();
+            for(Player p:board.players){
+//            for(StackCheckers s: p.stacks){
+//                System.out.println("                stack at " + s.position.getID());
+//            }
+//            for(Checker c: p.playingCheckers){
+//                System.out.println("                checker at " + c.position.getID());
+//            }
+                if(p.playingCheckers.size()==0 && p.stacks.size()==0){
+                    System.out.println("Player " + p.color + " won!");
+                    stopGame();
+                }
             }
-            for(Checker c: p.playingCheckers){
-                System.out.println("                checker at " + c.position.getID());
-            }
-            if(p.playingCheckers.size()==0 && p.stacks.size()==0){
-                System.out.println("Player " + p.color + " won!");
-                return;
-            }
+            board.setNoBasicMove();
+            board.notTranspose();
+            updatePlayer();
+            addGameState();
+            current.makeMove();
         }
-        board.setNoBasicMove();
-        board.notTranspose();
-        updatePlayer();
-        addGameState();
-        current.makeMove();
     }
 
     public void addGameState() {
@@ -84,10 +86,12 @@ public class Play {
         if(current.type != PlayerType.HUMAN){
             current.makeMove();
         }
-//        current.getMoves();
-        System.out.println("IIIIIIIIIIIIIIIIIIIIIII " + current.shouldImpasse());
     }
 
+    public void stopGame(){
+        gameStopped = true;
+        System.out.println("✨ PLAYER " + current.indexFromColor()  + " WON✨");
+    }
 
 
 
