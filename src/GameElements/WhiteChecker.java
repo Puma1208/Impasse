@@ -23,7 +23,7 @@ public class WhiteChecker extends Checker{
     public void slide(Cell cell) {
         super.slide(cell);
         if(mustCrown()){
-            this.mustCrown = true;
+            System.out.println("    Must crown checker at " + this.position.getID());
         }
     }
 

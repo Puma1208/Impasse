@@ -24,7 +24,6 @@ public class BlackChecker extends Checker{
         super.slide(cell);
         if(mustCrown()){
             System.out.println("    Must crown checker at " + this.position.getID());
-            this.mustCrown = true;
         }
     }
 
@@ -76,7 +75,5 @@ public class BlackChecker extends Checker{
     public boolean canCrownWith(Checker checker) {
         return super.canCrownWith(checker) && mustCrown();
     }
-
-
 
 }

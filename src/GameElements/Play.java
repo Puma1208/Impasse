@@ -54,17 +54,27 @@ public class Play {
      * And updates to next player and next game state
      */
     public void playerMoved() {
-        if(current.playingCheckers.size()==0 && current.stacks.size()==0){
-            stopGame();
+        ArrayList<Checker> toCrown = current.getCheckersToCrown();
+        ArrayList<Checker> singles = current.getSingleCheckers();
+        System.out.println("CROWN _ " + toCrown.size() + " " + singles.size());
+        if(toCrown.size()>0 && singles.size()>1){
+            System.out.println("Crowning available");
+            this.board.crownMode = true;
+
+        }else{
+            if(current.playingCheckers.size()==0 && current.stacks.size()==0){
+                stopGame();
+            }
+            if(!gameStopped){
+                board.notSlide();
+                board.setNoBasicMove();
+                board.notTranspose();
+                updatePlayer();
+                addGameState();
+                current.makeMove();
+            }
         }
-        if(!gameStopped){
-            board.notSlide();
-            board.setNoBasicMove();
-            board.notTranspose();
-            updatePlayer();
-            addGameState();
-            current.makeMove();
-        }
+
     }
 
     public void addGameState() {

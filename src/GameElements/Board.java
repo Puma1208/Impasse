@@ -18,8 +18,8 @@ public class Board implements Cloneable{
     static GamePlay gamePlay;
     static GameState gameState;
 
-    Cell from;
-    Cell to;
+    public boolean crownMode;
+
 
     public Board(Play play, int size, PlayerType type1, PlayerType type2){
         this.play = play;
@@ -29,8 +29,7 @@ public class Board implements Cloneable{
         this.players[0].setBoard(this);
         this.players[1].setBoard(this);
         initialiseCheckers();
-        from = null;
-        to = null;
+        crownMode = false;
     }
 
     public Board(GamePlay gp, int size, PlayerType type1, PlayerType type2)  {

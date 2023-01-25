@@ -10,8 +10,7 @@ public abstract class Checker implements Piece{
     Cell position;
     static Board board;
     StackCheckers stack;
-    boolean mustCrown;
-    boolean selectedToCrown;
+//    boolean selectedToCrown;
 
     public Checker(Player player, Cell cell, Board board){
         this.player = player;
@@ -20,7 +19,7 @@ public abstract class Checker implements Piece{
         setPosition(cell);
         this.board = board;
         this.stack = null;
-        this.selectedToCrown = false;
+//        this.selectedToCrown = false;
 
     }
     public Board getBoard(){    return board; }
@@ -106,19 +105,24 @@ public abstract class Checker implements Piece{
      *  if the current checker should be crowned
      * @return
      */
+    @Override
     public boolean mustCrown(){
         return this.stack==null;
     }
 
+
     /**
-     *
+     * The current piece - must only be a checker - will crown the parameter
      * @param checker
      */
-    public void crown(Checker checker){
-        if(canCrownWith(checker)){
-            new StackCheckers(board, this, checker);
-            this.mustCrown = false;
-            checker.selectedToCrown = false;
+    @Override
+    public void crown(Checker checker) {
+        if(checker.canCrownWith(this)){
+            this.position.setUnoccupied();
+            new StackCheckers(board, checker, this);
+            this.getBoard().crownMode = false;
+            notifyMoved();
+
         }
     }
 
@@ -130,7 +134,7 @@ public abstract class Checker implements Piece{
      * @return if can crown with the current checker
      */
     public boolean canCrownWith(Checker checker){
-        return checker.color==this.color && checker.stack==null;
+        return checker.color==this.color && checker.stack==null && this!=checker;
     }
 
     /**
@@ -152,6 +156,7 @@ public abstract class Checker implements Piece{
     public void notifyMoved()  {
         this.player.deSelectedPiece();
         board.play.playerMoved();
+        // TODO method to not let player do anything after crowning
     }
 
 }

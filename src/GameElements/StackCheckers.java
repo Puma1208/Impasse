@@ -84,7 +84,7 @@ public class StackCheckers implements Piece{
             System.out.println("IMPASSE Stack at " + this.position.getID());
             if(this.bottomChecker.mustCrown()){
                 System.out.println("Must crown checker at " + this.position.getID());
-                this.bottomChecker.mustCrown = true;
+//                this.bottomChecker.mustCrown = true;
             }
             // Available to crown from previous turn
             // Little tricky for after impasse to crown and available to crown
@@ -289,8 +289,6 @@ public class StackCheckers implements Piece{
     }
 
 
-
-
     /**
      * Check if the current stack is in the nearest row
      * with respect to the current player
@@ -315,10 +313,10 @@ public class StackCheckers implements Piece{
             this.position.setOccupation(this.bottomChecker);
             this.bottomChecker.stack = null;
             this.player.removeTopChecker(this);
-            //Available to crown from previous turn
-            if(this.player.getCheckersToCrown().size()>0){
-                this.bottomChecker.selectedToCrown = true;
-            }
+//            //Available to crown from previous turn
+//            if(this.player.getCheckersToCrown().size()>0){
+//                this.bottomChecker.selectedToCrown = true;
+//            }
         }
         else{
             System.out.println("    Can't bear-off stack at " + this.position.getID());
@@ -337,6 +335,15 @@ public class StackCheckers implements Piece{
         board.play.playerMoved();
     }
 
+    /**
+     * The current piece - must only be a checker - will crown the parameter
+     *
+     * @param checker
+     */
+    @Override
+    public void crown(Checker checker) {
+
+    }
 
 
 }

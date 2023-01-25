@@ -116,17 +116,26 @@ public class JCell extends JPanel implements MouseListener {
         }else{
             Piece occupying = cell.getOccupyingPiece();
             if(occupying!=null){
-                if(occupying.getPlayer()==jboard.board.play.getCurrentPlayer()){
-                    occupying.getPlayer().notifySelectPiece(occupying);
-                } else {
-                    System.out.println("    Piece at " + cell.getID() + " is not a piece of the current player");
+                if(jboard.board.crownMode){
+                    if(jboard.board.play.getCurrentPlayer().selectedPiece==null){
+                        occupying.getPlayer().notifySelectPiece(occupying);
+                    }else{
+                        occupying.getPlayer().notifySelectedCell(cell);
+                    }
+                }else{
+                    if(occupying.getPlayer()==jboard.board.play.getCurrentPlayer()){
+                        occupying.getPlayer().notifySelectPiece(occupying);
+                    } else {
+                        System.out.println("    Piece at " + cell.getID() + " is not a piece of the current player");
+                    }
                 }
             }
             else{
                 jboard.board.play.getCurrentPlayer().notifySelectedCell(cell);
             }
-        }
+
     }
+}
 
     @Override
     public void mousePressed(MouseEvent e) {

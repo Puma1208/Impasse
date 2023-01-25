@@ -57,4 +57,10 @@ public interface Piece {
      *  was performed
      */
     void notifyMoved() ;
+
+    /**
+     * The current piece - must only be a checker - will crown the parameter
+     * @param checker
+     */
+    void crown(Checker checker);
 }

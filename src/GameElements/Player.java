@@ -17,8 +17,8 @@ public abstract class Player {
     boolean shouldCrown;
     private final int playerIndex;
 
-    protected Piece selectedPiece;
-    protected Cell selectedCell;
+    public Piece selectedPiece;
+    public Cell selectedCell;
 
     public boolean moved;
 
@@ -121,7 +121,7 @@ public abstract class Player {
     public ArrayList<Checker> getCheckersToCrown(){
         ArrayList<Checker> singlesToCrown = new ArrayList<>();
         for(Checker c: getSingleCheckers()){
-            if(c.mustCrown && c.mustCrown()){
+            if(c.mustCrown()){
                 singlesToCrown.add(c);
             }
         }
@@ -143,22 +143,32 @@ public abstract class Player {
      */
     public void notifySelectPiece(Piece piece) {
 
+        if(board.crownMode){
+            System.out.println("CROWN MODE");
+            if(piece instanceof Checker && piece.mustCrown()){
+                System.out.println("Checker selected for crown " + piece.getPosition().getID());
+                this.selectedPiece = piece;
 
-        if(this.selectedPiece!=null
-                && this.selectedPiece instanceof StackCheckers && piece instanceof Checker
-                && this.selectedPiece.canTranspose(((Checker) piece).position)) {
-//            System.out.println("ready for transpose");
-            this.selectedPiece.transpose(((Checker) piece).position);
-
+            }else{
+                System.out.println("The seleced piece is not a checker - not candidate for crowning");
+            }
         }else{
-            if(shouldImpasse()){
+            if(this.selectedPiece!=null
+                    && this.selectedPiece instanceof StackCheckers && piece instanceof Checker
+                    && this.selectedPiece.canTranspose(((Checker) piece).position)) {
+//            System.out.println("ready for transpose");
+                this.selectedPiece.transpose(((Checker) piece).position);
+
+            }else{
+                if(shouldImpasse()){
 //                System.out.println("ready for impasse");
 
-                piece.impasse();
-            }
-            else{
+                    piece.impasse();
+                }
+                else{
 //                System.out.println("Selected piece");
-                this.selectedPiece = piece;
+                    this.selectedPiece = piece;
+                }
             }
         }
     }
@@ -173,35 +183,49 @@ public abstract class Player {
      * @param cell
      */
     public void notifySelectedCell(Cell cell){
-        if(selectedPiece==null){
-            if(cell.isOccupied()){
-                notifySelectPiece(cell.getOccupyingPiece());
-            }
-        }else{
-            this.selectedCell = cell;
-            if(this.selectedPiece instanceof Checker){
-                if(!cell.isOccupied()){
-                    selectedPiece.slide(cell);
-                }else{
-                    notifySelectPiece(cell.getOccupyingPiece());
-                }
-            }
-            if(this.selectedPiece instanceof StackCheckers){
-                if(!cell.isOccupied()){
-                    selectedPiece.slide(cell);
-                }
-                else if(selectedPiece.canTranspose(cell)){
-                    selectedPiece.transpose(cell);
+        if(board.crownMode){
+            System.out.println("CROWN MODE");
+            if(cell.getOccupying() == null){
+                System.out.println("Can't crown " + selectedPiece.getPosition().getID() + " with empty cell");
+            }else{
+                if(selectedPiece instanceof Checker){
+                    System.out.println("CROWN " + selectedPiece.getPosition().getID() + " with " + cell.getOccupying().position.getID());
+                    cell.getOccupying().crown((Checker) selectedPiece);
                 }
                 else{
-                    notifySelectPiece(cell.getOccupyingStack());
+                    System.out.println("Can't crown the stack at " + selectedPiece.getPosition().getID());
+                }
+            }
+            selectedPiece = null;
+        }
+        else{
+            if(selectedPiece==null){
+                if(cell.isOccupied()){
+                    notifySelectPiece(cell.getOccupyingPiece());
+                }
+            }else{
+                this.selectedCell = cell;
+                if(this.selectedPiece instanceof Checker){
+                    if(!cell.isOccupied()){
+                        selectedPiece.slide(cell);
+                    }else{
+                        notifySelectPiece(cell.getOccupyingPiece());
+                    }
+                }
+                if(this.selectedPiece instanceof StackCheckers){
+                    if(!cell.isOccupied()){
+                        selectedPiece.slide(cell);
+                    }
+                    else if(selectedPiece.canTranspose(cell)){
+                        selectedPiece.transpose(cell);
+                    }
+                    else{
+                        notifySelectPiece(cell.getOccupyingStack());
 
+                    }
                 }
             }
         }
-    }
-    public void notifyForCrowning() {
-
     }
 
 
@@ -288,5 +312,28 @@ public abstract class Player {
             }
         }
         return canImpasse;
+    }
+
+    /**
+     *
+     * @param toCrown list of checker that need to be crowned
+     * @param singles list of single checkers that can be used for crown
+     * @return checker[0] the checker to crown and checker[1] the single checker used to crown
+     */
+    public Checker[] getPairCrown(ArrayList<Checker> toCrown, ArrayList<Checker> singles){
+        if(toCrown.size()==1 && singles.size()==1 && toCrown.get(0)==singles.get(0)){
+            System.out.println("Impossible to crown a checker with itself");
+            return null;
+        }
+        Random rand = new Random();
+        int randomIndexCrown = rand.nextInt(toCrown.size());
+        Random rand2;
+        int randomIndexToCrown;
+        do{
+            rand2 = new Random();
+            randomIndexToCrown = rand2.nextInt(singles.size());
+        }while(!toCrown.get(randomIndexCrown).canCrownWith(singles.get(randomIndexCrown)));
+        Checker[] pair = {toCrown.get(randomIndexCrown), toCrown.get(randomIndexToCrown)};
+        return pair;
     }
 }

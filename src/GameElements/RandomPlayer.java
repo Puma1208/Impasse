@@ -59,6 +59,7 @@ public class RandomPlayer extends Player{
      */
     @Override
     public void makeMove() {
+        // TODO sort out how to deal with crown and random player
         super.makeMove();
         ArrayList<Move> moves = getMoves();
         if(moves.size()==0){
@@ -74,9 +75,18 @@ public class RandomPlayer extends Player{
             notifySelectPiece(moves.get(randomIndex).piece);
             notifySelectedCell(moves.get(randomIndex).cell);
         }
-//        if()
-
-
+        ArrayList<Checker> toCrown = getCheckersToCrown();
+        ArrayList<Checker> singles = getSingleCheckers();
+        System.out.println("CROWN _ " + toCrown.size() + " " + singles.size());
+        if(toCrown.size()>0 && singles.size()>1){
+            System.out.println("Crowning available");
+            this.board.crownMode = true;
+            Checker[] pairCrown = getPairCrown(toCrown, singles);
+            notifySelectPiece(pairCrown[0]);
+            notifySelectedCell(pairCrown[1].position);
+        }
 
     }
+
+
 }
