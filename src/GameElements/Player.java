@@ -144,13 +144,13 @@ public abstract class Player {
     public void notifySelectPiece(Piece piece) {
 
         if(board.crownMode){
-            System.out.println("CROWN MODE");
+            System.out.println("CROWN MODE - choose checker to crown");
             if(piece instanceof Checker && piece.mustCrown()){
                 System.out.println("Checker selected for crown " + piece.getPosition().getID());
                 this.selectedPiece = piece;
 
             }else{
-                System.out.println("The seleced piece is not a checker - not candidate for crowning");
+                System.out.println("The selected piece is not a checker - not candidate for crowning");
             }
         }else{
             if(this.selectedPiece!=null
@@ -184,15 +184,15 @@ public abstract class Player {
      */
     public void notifySelectedCell(Cell cell){
         if(board.crownMode){
-            System.out.println("CROWN MODE");
-            if(cell.getOccupying() == null){
+            System.out.println("CROWN MODE - choose the checker to be crowning the current");
+            if(cell.getOccupying() == null && selectedPiece!=null){
                 System.out.println("Can't crown " + selectedPiece.getPosition().getID() + " with empty cell");
             }else{
                 if(selectedPiece instanceof Checker){
                     System.out.println("CROWN " + selectedPiece.getPosition().getID() + " with " + cell.getOccupying().position.getID());
                     cell.getOccupying().crown((Checker) selectedPiece);
                 }
-                else{
+                else if(selectedPiece!=null){
                     System.out.println("Can't crown the stack at " + selectedPiece.getPosition().getID());
                 }
             }
@@ -333,7 +333,7 @@ public abstract class Player {
             rand2 = new Random();
             randomIndexToCrown = rand2.nextInt(singles.size());
         }while(!toCrown.get(randomIndexCrown).canCrownWith(singles.get(randomIndexCrown)));
-        Checker[] pair = {toCrown.get(randomIndexCrown), toCrown.get(randomIndexToCrown)};
+        Checker[] pair = {toCrown.get(randomIndexCrown), singles.get(randomIndexToCrown)};
         return pair;
     }
 }

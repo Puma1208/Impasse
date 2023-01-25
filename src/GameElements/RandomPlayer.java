@@ -77,9 +77,7 @@ public class RandomPlayer extends Player{
         }
         ArrayList<Checker> toCrown = getCheckersToCrown();
         ArrayList<Checker> singles = getSingleCheckers();
-        System.out.println("CROWN _ " + toCrown.size() + " " + singles.size());
         if(toCrown.size()>0 && singles.size()>1){
-            System.out.println("Crowning available");
             this.board.crownMode = true;
             Checker[] pairCrown = getPairCrown(toCrown, singles);
             notifySelectPiece(pairCrown[0]);

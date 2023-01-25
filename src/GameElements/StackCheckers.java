@@ -82,12 +82,6 @@ public class StackCheckers implements Piece{
             this.bottomChecker.stack = null;
             this.player.removeTopChecker(this);
             System.out.println("IMPASSE Stack at " + this.position.getID());
-            if(this.bottomChecker.mustCrown()){
-                System.out.println("Must crown checker at " + this.position.getID());
-//                this.bottomChecker.mustCrown = true;
-            }
-            // Available to crown from previous turn
-            // Little tricky for after impasse to crown and available to crown
             notifyMoved();
         }
         else{
@@ -114,11 +108,6 @@ public class StackCheckers implements Piece{
             System.out.println("SLIDE from " + this.position.getID() + " to " + cell.getID() );
             setPosition(cell);
             bearOff();
-
-//            if(this.bottomChecker.mustCrown()){
-//                System.out.println("Must crown checker at " + this.position.getID());
-//                this.bottomChecker.mustCrown = true;
-//            }
             notifyMoved();
         }else{
             System.out.println("Can't slide stack at " + this.position.getID() +"  to " + cell.getID());
@@ -157,7 +146,6 @@ public class StackCheckers implements Piece{
         if(canTranspose(cell)){
             System.out.println("TRANSPOSING from " + this.position.getID() + " to " + cell.getID());
             this.bottomChecker.stack = null;
-//            this.player.removeStack(this);
             this.player.stacks.remove(this);
             new StackCheckers(board, cell.getOccupying(), this.topChecker);
             this.position.setUnoccupied();
@@ -313,10 +301,7 @@ public class StackCheckers implements Piece{
             this.position.setOccupation(this.bottomChecker);
             this.bottomChecker.stack = null;
             this.player.removeTopChecker(this);
-//            //Available to crown from previous turn
-//            if(this.player.getCheckersToCrown().size()>0){
-//                this.bottomChecker.selectedToCrown = true;
-//            }
+
         }
         else{
             System.out.println("    Can't bear-off stack at " + this.position.getID());

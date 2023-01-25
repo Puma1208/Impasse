@@ -56,34 +56,35 @@ public class Play {
     public void playerMoved() {
         ArrayList<Checker> toCrown = current.getCheckersToCrown();
         ArrayList<Checker> singles = current.getSingleCheckers();
-        System.out.println("CROWN _ " + toCrown.size() + " " + singles.size());
         if(toCrown.size()>0 && singles.size()>1){
-            System.out.println("Crowning available");
+            System.out.println("Crowning possible");
             this.board.crownMode = true;
 
         }else{
-            if(current.playingCheckers.size()==0 && current.stacks.size()==0){
-                stopGame();
-            }
-            if(!gameStopped){
-                board.notSlide();
-                board.setNoBasicMove();
-                board.notTranspose();
-                updatePlayer();
-                addGameState();
-                current.makeMove();
-            }
+            playerFinishTurn();
         }
 
+    }
+
+    public void playerFinishTurn(){
+        if(current.playingCheckers.size()==0 && current.stacks.size()==0){
+            stopGame();
+        }
+        if(!gameStopped){
+            board.notSlide();
+            board.setNoBasicMove();
+            board.notTranspose();
+            updatePlayer();
+            addGameState();
+            current.makeMove();
+        }
     }
 
     public void addGameState() {
         states.add(new GameState(this.current));
 
     }
-    public void playerCrowned(){
 
-    }
 
     public void startGame(){
         if(current.type != PlayerType.HUMAN){

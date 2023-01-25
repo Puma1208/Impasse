@@ -10,7 +10,6 @@ public abstract class Checker implements Piece{
     Cell position;
     static Board board;
     StackCheckers stack;
-//    boolean selectedToCrown;
 
     public Checker(Player player, Cell cell, Board board){
         this.player = player;
@@ -19,7 +18,6 @@ public abstract class Checker implements Piece{
         setPosition(cell);
         this.board = board;
         this.stack = null;
-//        this.selectedToCrown = false;
 
     }
     public Board getBoard(){    return board; }
@@ -121,8 +119,7 @@ public abstract class Checker implements Piece{
             this.position.setUnoccupied();
             new StackCheckers(board, checker, this);
             this.getBoard().crownMode = false;
-            notifyMoved();
-
+            notifyCrowned();
         }
     }
 
@@ -137,14 +134,6 @@ public abstract class Checker implements Piece{
         return checker.color==this.color && checker.stack==null && this!=checker;
     }
 
-    /**
-     *
-     * @param checker is the one to be crowned by the current checker
-     */
-    public void selectedToCrown(Checker checker){
-        checker.crown(this);
-    }
-
 
     /**
      * To put in a method when  a slide
@@ -156,7 +145,10 @@ public abstract class Checker implements Piece{
     public void notifyMoved()  {
         this.player.deSelectedPiece();
         board.play.playerMoved();
-        // TODO method to not let player do anything after crowning
+    }
+
+    public void notifyCrowned(){
+        board.play.playerFinishTurn();
     }
 
 }
