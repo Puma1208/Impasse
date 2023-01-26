@@ -54,12 +54,13 @@ public class Play {
      * And updates to next player and next game state
      */
     public void playerMoved() {
+        board.setNoBasicMove();
+        board.notTranspose();
         ArrayList<Checker> toCrown = current.getCheckersToCrown();
         ArrayList<Checker> singles = current.getSingleCheckers();
         if(toCrown.size()>0 && singles.size()>1){
-            System.out.println("Crowning possible");
+            System.out.println("Possible to CROWN");
             this.board.crownMode = true;
-
         }else{
             playerFinishTurn();
         }

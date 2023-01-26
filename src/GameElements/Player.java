@@ -332,7 +332,7 @@ public abstract class Player {
         do{
             rand2 = new Random();
             randomIndexToCrown = rand2.nextInt(singles.size());
-        }while(!toCrown.get(randomIndexCrown).canCrownWith(singles.get(randomIndexCrown)));
+        }while(!toCrown.get(randomIndexCrown).canCrownWith(singles.get(randomIndexToCrown)));
         Checker[] pair = {toCrown.get(randomIndexCrown), singles.get(randomIndexToCrown)};
         return pair;
     }
