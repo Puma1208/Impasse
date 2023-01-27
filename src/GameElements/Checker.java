@@ -20,6 +20,8 @@ public abstract class Checker implements Piece{
         this.stack = null;
 
     }
+
+
     public Board getBoard(){    return board; }
 
     public Color getColor() {
@@ -151,6 +153,9 @@ public abstract class Checker implements Piece{
         board.play.playerFinishTurn();
     }
 
+    public int getCellsFromFurthestRow(){
+        return -1;
+    }
 }
 
 

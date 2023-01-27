@@ -8,15 +8,13 @@ import java.util.List;
 public class Board implements Cloneable{
 
     static final char[] LETTERS = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
-    private final Cell[][] cells;
+    private Cell[][] cells;
     static int size;
-    public final Player[] players;
-    private ArrayList<StackCheckers> stacksWhite = new ArrayList<>();
-    private ArrayList<StackCheckers> stacksBlack = new ArrayList<>();
+    public Player[] players;
 
     public Play play;
     static GamePlay gamePlay;
-    static GameState gameState;
+    GameState gameState;
 
     public boolean crownMode;
 
@@ -32,6 +30,7 @@ public class Board implements Cloneable{
         crownMode = false;
     }
 
+
     public Board(GamePlay gp, int size, PlayerType type1, PlayerType type2)  {
 //        this.gamePlay = gp;
 //        gamePlay.addState(new GameState( gp.currentPlayer));
@@ -43,10 +42,46 @@ public class Board implements Cloneable{
         initialiseCheckers();
     }
 
+    public Board(Player[] players, int indexCurrentPlayer){
+
+        this.players = new Player[]{Player.createPlayer(players[0].type, Color.WHITE), Player.createPlayer(players[1].type, Color.BLACK)};
+        this.players[0].setBoard(this);
+        this.players[1].setBoard(this);
+        this.play = new Play(gameState,this, this.players[indexCurrentPlayer]);
+        this.size = players[0].board.getSize();
+        this.cells = initialiseBoard();
+        for(Player player: players){
+            for(StackCheckers stack: player.stacks){
+                Checker bottom;
+                Checker top;
+                if(stack.color==Color.WHITE){
+                    bottom = new WhiteChecker(this.players[0], this.getCell(stack.position.row, stack.position.column), this);
+                    top = new WhiteChecker(this.players[0], this.getCell(stack.position.row, stack.position.column), this);
+
+                }else{
+                    bottom = new BlackChecker(this.players[1], this.getCell(stack.position.row, stack.position.column), this);
+                    top = new BlackChecker(this.players[1], this.getCell(stack.position.row, stack.position.column), this);
+                }
+                new StackCheckers(this, bottom, top, stack.position);
+            }
+
+            for(Checker checker: player.playingCheckers){
+                if(checker.stack == null){
+                    if(checker instanceof WhiteChecker){
+                        new WhiteChecker(this.players[0], this.getCell(checker.position.row, checker.position.column), this);
+                    }else{
+                        new BlackChecker(this.players[0], this.getCell(checker.position.row, checker.position.column), this);
+
+                    }
+                }
+            }
+        }
+    }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public Board clone() throws CloneNotSupportedException {
+        Board cloned = new Board(this.players, this.play.getCurrentPlayer().getPlayerIndex());
+        return cloned;
     }
 
     private Cell[][] initialiseBoard(){

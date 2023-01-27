@@ -38,6 +38,8 @@ public abstract class Player {
     public static Player createPlayer(PlayerType type, Color color){
         if(type==PlayerType.RANDOM){
             return new RandomPlayer(color);
+        }if(type==PlayerType.AI){
+            return new AIPlayer(color);
         }
         else return new HumanPlayer(type, color);
     }

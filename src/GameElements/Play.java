@@ -16,28 +16,26 @@ public class Play {
         this.gameStopped = false;
         current = this.board.players[1];
         updatePlayer();
-        GameState.setBoard(board);
-        states.add(new GameState(current));
         startGame();
     }
 
+    /**
+     * To finish
+     * @param b
+     */
+    public Play(GameState state, Board b, Player current){
+        this.board = b;
+        this.states = new ArrayList<>();
+        this.gameStopped = false;
+        this.current = current;
+        this.states.add(state);
+
+    }
 
     public Player getCurrentPlayer(){
         return this.current;
     }
 
-    /**
-     * Until the game is finished - a player has won, continue
-     */
-    public void run(){
-        int number = 10;
-        int c = 1;
-        while(c<number){
-//            current.notifyPlayer();
-            // check here if should crown
-            updatePlayer();
-        }
-    }
 
     public void updatePlayer(){
         if(current.getPlayerIndex()==0){
@@ -86,8 +84,9 @@ public class Play {
 
     }
 
-
     public void startGame(){
+        GameState.setStartingBoard(board);
+        states.add(new GameState(current));
         if(current.type != PlayerType.HUMAN){
             current.makeMove();
         }
@@ -96,6 +95,54 @@ public class Play {
     public void stopGame(){
         gameStopped = true;
         System.out.println("✨ PLAYER " + current.indexFromColor() + " " + current.color + " WON ✨");
+    }
+
+
+    /**
+     * static
+     */
+    public static void updatePlayer(Board board){
+        if(board.gameState.current.getPlayerIndex()==0){
+            board.gameState.current = board.players[1];
+        }else if(board.gameState.current.getPlayerIndex()==1){
+            board.gameState.current = board.players[0];
+        }
+    }
+
+    public static Player getCurrentPlayer(Board board){
+        return board.gameState.current;
+    }
+
+    public static void playerMoved(Board board) {
+        board.setNoBasicMove();
+        board.notTranspose();
+        ArrayList<Checker> toCrown = board.gameState.current.getCheckersToCrown();
+        ArrayList<Checker> singles = board.gameState.current.getSingleCheckers();
+        if(toCrown.size()>0 && singles.size()>1){
+            System.out.println("Possible to CROWN");
+            board.crownMode = true;
+        }else{
+            playerFinishTurn(board);
+        }
+
+    }
+    public static void playerFinishTurn(Board board){
+        if(board.gameState.current.playingCheckers.size()==0 && board.gameState.current.stacks.size()==0){
+            System.out.println("✨ PLAYER " + board.gameState.current.indexFromColor() + " " + board.gameState.current.color + " WON ✨");
+        }
+        else{
+            board.notSlide();
+            board.setNoBasicMove();
+            board.notTranspose();
+            updatePlayer(board);
+            addGameState(board.gameState,board);
+            board.gameState.current.makeMove();
+        }
+    }
+
+    public static void addGameState(GameState gameState, Board board) {
+        gameState.addChild(new GameState(gameState.current, board));
+
     }
 
 

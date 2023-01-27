@@ -7,7 +7,7 @@ import java.util.List;
 public class RandomPlayer extends Player{
 
     RandomPlayer(Color color){
-        super(PlayerType.AI, color);
+        super(PlayerType.RANDOM, color);
 
     }
 
