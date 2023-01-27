@@ -59,7 +59,7 @@ public class Board implements Cloneable{
                     bottom = new BlackChecker(this.players[1], this.getCell(stack.position.row, stack.position.column), this);
                     top = new BlackChecker(this.players[1], this.getCell(stack.position.row, stack.position.column), this);
                 }
-                new StackCheckers(this, bottom, top, this.getCell(stack.position));
+                new StackCheckers(this, bottom, top);
             }
 
             for(Checker checker: player.playingCheckers){
@@ -67,7 +67,7 @@ public class Board implements Cloneable{
                     if(checker instanceof WhiteChecker){
                         new WhiteChecker(this.players[0], this.getCell(checker.position.row, checker.position.column), this);
                     }else{
-                        new BlackChecker(this.players[0], this.getCell(checker.position.row, checker.position.column), this);
+                        new BlackChecker(this.players[1], this.getCell(checker.position.row, checker.position.column), this);
 
                     }
                 }
