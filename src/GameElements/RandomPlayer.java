@@ -59,7 +59,6 @@ public class RandomPlayer extends Player{
      */
     @Override
     public void makeMove() {
-        // TODO sort out how to deal with crown and random player
         super.makeMove();
         ArrayList<Move> moves = getMoves();
         if(moves.size()==0){

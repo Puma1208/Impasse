@@ -1,4 +1,7 @@
 package GameElements;
+import Minimax.GameTree;
+import Minimax.Tree;
+
 import java.awt.Color;
 import java.util.*;
 
@@ -339,7 +342,8 @@ public abstract class Player {
         return pair;
     }
 
-    public void simulateMove(Move move){
+    public void simulateGame(int depth, GameState current){
 
     }
+
 }

@@ -11,9 +11,4 @@ public class GameTree {
         root = currentState;
     }
 
-    public void getBestChild(){
-        for(GameState s: root.getChildren()){
-
-        }
-    }
 }

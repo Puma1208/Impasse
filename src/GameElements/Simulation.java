@@ -35,7 +35,7 @@ public class Simulation extends Play{
         board.notSlide();
         board.setNoBasicMove();
         board.notTranspose();
-//        updatePlayer();
+        updatePlayer();
         addGameState();
 //        current.makeMove();
     }

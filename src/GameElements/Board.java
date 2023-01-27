@@ -29,19 +29,10 @@ public class Board implements Cloneable{
         crownMode = false;
     }
 
-
-//    public Board(GamePlay gp, int size, PlayerType type1, PlayerType type2)  {
-////        this.gamePlay = gp;
-////        gamePlay.addState(new GameState( gp.currentPlayer));
-//        this.gameState = gamePlay.gameStates.get(gamePlay.gameStates.size()-1);
-//        this.size = size;
-//        this.cells = initialiseBoard();
-//        this.players = new Player[]{Player.createPlayer(type1, Color.WHITE), Player.createPlayer(type2, Color.BLACK)};
-//        initialiseCheckers();
-//    }
-
     public Board(Player[] players, int indexCurrentPlayer){
-        this.players = new Player[]{Player.createPlayer(players[0].type, Color.WHITE), Player.createPlayer(players[1].type, Color.BLACK)};
+//        this.players = new Player[]{Player.createPlayer(players[0].type, Color.WHITE), Player.createPlayer(players[1].type, Color.BLACK)};
+        this.players = new Player[]{Player.createPlayer(PlayerType.AI, Color.WHITE), Player.createPlayer(PlayerType.AI, Color.BLACK)};
+
         this.players[0].setBoard(this);
         this.players[1].setBoard(this);
         this.play = new Play(gameState,this, this.players[indexCurrentPlayer]);

@@ -11,6 +11,16 @@ public class GameState {
     private Board board;
     Player current;
 
+    /**
+     * Move performed to arrive at this state
+     */
+    public Move move;
+
+    public Checker toCrown;
+    public Checker crowning;
+
+    public Checker impasse;
+
 
     GameState parent = null;
     private double value;
@@ -89,4 +99,31 @@ public class GameState {
     public boolean isLeaf(){
         return children.isEmpty();
     }
+
+    /**
+     * Remove the siblings that should be visited next by the current parrent
+     * @param child
+     */
+    public void removeChildrenAfter(GameState child){
+        if(children.contains(child)){
+            children.subList(children.indexOf(child)+1, children.size()).clear();
+        }
+    }
+
+    /**
+     * Setting the move parameter to reach the current state from the parent
+     * @param move
+     */
+    public void setMove(Move move){
+        this.move = move;
+    }
+
+    public void setCrown(Checker toCrown, Checker crowning){
+        this.toCrown = toCrown;
+        this.crowning = crowning;
+    }
+
+//    public void setImpasse(){
+//        this.impasse =
+//    }
 }
