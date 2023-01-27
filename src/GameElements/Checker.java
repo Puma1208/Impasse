@@ -8,7 +8,7 @@ public abstract class Checker implements Piece{
     Player player;
     Color color;
     Cell position;
-    static Board board;
+    Board board;
     StackCheckers stack;
 
     public Checker(Player player, Cell cell, Board board){

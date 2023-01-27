@@ -76,4 +76,8 @@ public class BlackChecker extends Checker{
         return super.canCrownWith(checker) && mustCrown();
     }
 
+    @Override
+    public int getCellsFromFurthestRow() {
+        return Math.abs(this.position.row - 1);
+    }
 }

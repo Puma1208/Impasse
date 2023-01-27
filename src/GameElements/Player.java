@@ -5,7 +5,7 @@ import java.util.*;
 public abstract class Player {
 
 
-    static Board board;
+    Board board;
     PlayerType type;
     int score = 0;
     Color color;
@@ -32,7 +32,7 @@ public abstract class Player {
         playerIndex = indexFromColor();
     }
 
-    public static void setBoard(Board b){
+    public void setBoard(Board b){
         board = b;
     }
     public static Player createPlayer(PlayerType type, Color color){
@@ -144,7 +144,7 @@ public abstract class Player {
      * @param piece
      */
     public void notifySelectPiece(Piece piece) {
-
+//        System.out.println(piece);
         if(board.crownMode){
             System.out.println("CROWN MODE - choose checker to crown");
             if(piece instanceof Checker && piece.mustCrown()){
@@ -337,5 +337,9 @@ public abstract class Player {
         }while(!toCrown.get(randomIndexCrown).canCrownWith(singles.get(randomIndexToCrown)));
         Checker[] pair = {toCrown.get(randomIndexCrown), singles.get(randomIndexToCrown)};
         return pair;
+    }
+
+    public void simulateMove(Move move){
+
     }
 }

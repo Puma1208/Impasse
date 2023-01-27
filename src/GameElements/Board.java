@@ -13,7 +13,6 @@ public class Board implements Cloneable{
     public Player[] players;
 
     public Play play;
-    static GamePlay gamePlay;
     GameState gameState;
 
     public boolean crownMode;
@@ -31,19 +30,17 @@ public class Board implements Cloneable{
     }
 
 
-    public Board(GamePlay gp, int size, PlayerType type1, PlayerType type2)  {
-//        this.gamePlay = gp;
-//        gamePlay.addState(new GameState( gp.currentPlayer));
-        this.gameState = gamePlay.gameStates.get(gamePlay.gameStates.size()-1);
-        this.size = size;
-        this.cells = initialiseBoard();
-
-        this.players = new Player[]{Player.createPlayer(type1, Color.WHITE), Player.createPlayer(type2, Color.BLACK)};
-        initialiseCheckers();
-    }
+//    public Board(GamePlay gp, int size, PlayerType type1, PlayerType type2)  {
+////        this.gamePlay = gp;
+////        gamePlay.addState(new GameState( gp.currentPlayer));
+//        this.gameState = gamePlay.gameStates.get(gamePlay.gameStates.size()-1);
+//        this.size = size;
+//        this.cells = initialiseBoard();
+//        this.players = new Player[]{Player.createPlayer(type1, Color.WHITE), Player.createPlayer(type2, Color.BLACK)};
+//        initialiseCheckers();
+//    }
 
     public Board(Player[] players, int indexCurrentPlayer){
-
         this.players = new Player[]{Player.createPlayer(players[0].type, Color.WHITE), Player.createPlayer(players[1].type, Color.BLACK)};
         this.players[0].setBoard(this);
         this.players[1].setBoard(this);
@@ -62,7 +59,7 @@ public class Board implements Cloneable{
                     bottom = new BlackChecker(this.players[1], this.getCell(stack.position.row, stack.position.column), this);
                     top = new BlackChecker(this.players[1], this.getCell(stack.position.row, stack.position.column), this);
                 }
-                new StackCheckers(this, bottom, top, stack.position);
+                new StackCheckers(this, bottom, top, this.getCell(stack.position));
             }
 
             for(Checker checker: player.playingCheckers){
@@ -248,6 +245,26 @@ public class Board implements Cloneable{
         }
     }
 
+    public void printBoard(){
+        System.out.println("__________________________________________________");
+        for(Cell[] row: this.cells){
+            for(Cell cell: row){
+                System.out.print("[" + cell.getID() +"]" + cell.getOccupyingPiece());
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     *
+     * @param cell
+     * @return the cell at the same position as the parameter
+     */
+    public Cell getCell(Cell cell){
+//        System.out.println("Searching for cell " + cell.getID());
+//        System.out.println("                    " +getCell(cell.row, cell.column).getID());
+        return getCell(cell.row, cell.column);
+    }
 
 
 

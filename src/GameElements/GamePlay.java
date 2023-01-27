@@ -19,7 +19,7 @@ public class GamePlay {
         ACTIONS.add("BEAROFF");
         ACTIONS.add("IMPASSE");
 
-        this.board = new Board(this, 8, player1, player2);
+//        this.board = new Board(this, 8, player1, player2);
 //        currentPlayer = board.players[0];
 
 //        GameState gameState = new GameState(this.board, currentPlayer);

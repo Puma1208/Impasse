@@ -1,5 +1,9 @@
 package Minimax;
 
+import GameElements.GameState;
+
+import java.awt.font.GlyphMetrics;
+
 public class AlphaBeta {
 
 
@@ -131,6 +135,45 @@ public class AlphaBeta {
 //        n.setValue(score);
         return score;
     }
+
+
+//    public static double alphaBetaFailHard(GameState node, int depth, int alpha, int beta, int player){
+//        if(depth==0 || node.isLeaf()){
+//            return node.getValue();
+//        }
+//        int value;
+//        if(player==1){
+//            value = (int) Double.NEGATIVE_INFINITY;
+//            for(GameState child: node.getChildren()){
+//
+//                value = Math.max(value, alphaBetaFailHard(child, depth-1, alpha, beta, 0));
+//                alpha = Math.max(alpha, value);
+//                if(alpha>=beta){
+//                    node.removeChildrenAfter(child);
+//                    node.setValue(alpha);
+//                    break;
+//                }
+////                return (int)alpha;
+//            }
+//        }else{
+//            value = (int) Double.POSITIVE_INFINITY;
+//            for(Node child: node.getChildren()){
+//
+//                value = Math.min(value, alphaBetaFailHard(child, depth-1, alpha, beta, 1));
+//                if(value <=alpha){
+//                    node.removeChildrenAfter(child);
+//                    node.setValue(value);
+//                    break;
+//                }
+//                beta = Math.min(beta, value);
+//            }
+//
+//        }
+//        System.out.println("setting value " + value);
+//        node.setValue(value);
+//        return value;
+//
+//    }
 
 
 }

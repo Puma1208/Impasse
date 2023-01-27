@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Play {
 
     public Board board;
-    private Player current;
+    protected Player current;
     public boolean gameStopped;
 
     ArrayList<GameState> states;
@@ -14,14 +14,16 @@ public class Play {
         this.board = new Board(this, size, type1, type2);
         this.states = new ArrayList<>();
         this.gameStopped = false;
-        current = this.board.players[1];
+        this.current = this.board.players[1];
         updatePlayer();
         startGame();
     }
 
     /**
-     * To finish
+     *
+     * @param state
      * @param b
+     * @param current
      */
     public Play(GameState state, Board b, Player current){
         this.board = b;

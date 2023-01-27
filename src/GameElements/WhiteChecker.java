@@ -84,4 +84,9 @@ public class WhiteChecker extends Checker{
     public boolean canCrownWith(Checker checker) {
         return super.canCrownWith(checker) && mustCrown();
     }
+
+    @Override
+    public int getCellsFromFurthestRow() {
+        return Math.abs(this.position.row - board.size);
+    }
 }

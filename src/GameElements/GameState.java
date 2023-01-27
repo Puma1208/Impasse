@@ -13,7 +13,7 @@ public class GameState {
 
 
     GameState parent = null;
-    private int value;
+    private double value;
     private ArrayList<GameState> children = new ArrayList<>();
 
 
@@ -23,17 +23,21 @@ public class GameState {
         this.current = current;
     }
 
+    /**
+     * Used for simulation
+     * @param current
+     * @param board
+     */
     public GameState(Player current, Board board)  {
         try {
-            board.gameState = this;
-//            System.out.println("            play " + board.play);
             this.board = board.clone();
-            this.board.gameState = this;
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
 
         this.current = this.board.players[current.getPlayerIndex()];
+        this.board.gameState = this;
+        this.board.play = new Simulation(this, this.board, this.current);
     }
 
     public void setPlayer(PlayerType player){
@@ -57,11 +61,11 @@ public class GameState {
     }
 
 
-    public void setValue(int value){
+    public void setValue(double value){
         this.value = value;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 

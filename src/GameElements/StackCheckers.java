@@ -7,7 +7,7 @@ public class StackCheckers implements Piece{
 
     Player player;
     Color color;
-    static Board board;
+    Board board;
     Cell position;
     Checker bottomChecker;
     Checker topChecker;
@@ -110,7 +110,7 @@ public class StackCheckers implements Piece{
             bearOff();
             notifyMoved();
         }else{
-            System.out.println("Can't slide stack at " + this.position.getID() +"  to " + cell.getID());
+            System.out.println("Can't slide stack at " + this.position.getID() +"  to " + cell.getID() + "_" + cell);
         }
 
     }
