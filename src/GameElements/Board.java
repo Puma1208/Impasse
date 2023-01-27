@@ -30,7 +30,6 @@ public class Board implements Cloneable{
     }
 
     public Board(Player[] players, int indexCurrentPlayer){
-//        this.players = new Player[]{Player.createPlayer(players[0].type, Color.WHITE), Player.createPlayer(players[1].type, Color.BLACK)};
         this.players = new Player[]{Player.createPlayer(PlayerType.AI, Color.WHITE), Player.createPlayer(PlayerType.AI, Color.BLACK)};
 
         this.players[0].setBoard(this);
@@ -129,9 +128,6 @@ public class Board implements Cloneable{
             }
             new StackCheckers(this, checker, topChecker);
         }
-        else{
-//            this.players[player.getPlayerIndex()].addChecker(checker);
-        }
     }
     public boolean canCreateStack(Checker checker){
         if((checker.getColor()==Color.WHITE && checker.getPosition().getRow()>2)
@@ -203,7 +199,6 @@ public class Board implements Cloneable{
 
     /**
      * After a player has moved - no need to show possible slides
-     * TODO: to speed up - only cells that have been possible for the selected checker
      */
     public void notSlide(){
         for(Cell[] row: this.cells){
@@ -236,15 +231,6 @@ public class Board implements Cloneable{
         }
     }
 
-    public void printBoard(){
-        System.out.println("__________________________________________________");
-        for(Cell[] row: this.cells){
-            for(Cell cell: row){
-                System.out.print("[" + cell.getID() +"]" + cell.getOccupyingPiece());
-            }
-            System.out.println();
-        }
-    }
 
     /**
      *
@@ -252,8 +238,6 @@ public class Board implements Cloneable{
      * @return the cell at the same position as the parameter
      */
     public Cell getCell(Cell cell){
-//        System.out.println("Searching for cell " + cell.getID());
-//        System.out.println("                    " +getCell(cell.row, cell.column).getID());
         return getCell(cell.row, cell.column);
     }
 

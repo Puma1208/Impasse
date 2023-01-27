@@ -1,6 +1,4 @@
 package GameElements;
-import Minimax.GameTree;
-import Minimax.Tree;
 
 import java.awt.Color;
 import java.util.*;

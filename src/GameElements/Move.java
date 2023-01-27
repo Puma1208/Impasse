@@ -2,10 +2,7 @@ package GameElements;
 
 import java.awt.event.MouseEvent;
 
-/**
- * Attempt class to have ArrayList for possible moves of player
- * mainly used to deal with random entries
- */
+
 public class Move {
 
     Piece piece;

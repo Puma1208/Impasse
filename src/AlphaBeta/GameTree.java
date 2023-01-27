@@ -1,4 +1,4 @@
-package Minimax;
+package AlphaBeta;
 
 import GameElements.GameState;
 

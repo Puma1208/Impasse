@@ -45,7 +45,7 @@ public class Play {
         }else if(current.getPlayerIndex()==1){
             current = board.players[0];
         }
-        System.out.println("----------------------- " + current.type + " " + current.color + " ----------------------- " );
+        System.out.println("----------------------- " + current.type + " " + current.getPlayerIndex() + " ----------------------- " );
 
     }
 
@@ -109,10 +109,6 @@ public class Play {
         }else if(board.gameState.current.getPlayerIndex()==1){
             board.gameState.current = board.players[0];
         }
-    }
-
-    public static Player getCurrentPlayer(Board board){
-        return board.gameState.current;
     }
 
     public static void playerMoved(Board board) {

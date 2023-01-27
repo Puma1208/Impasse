@@ -46,9 +46,10 @@ public class JBoard extends JPanel {
         createGUIboard(g);
     }
 
-    /** Create the JCells
-    * Create the JCheckers
- *  */
+    /**
+     * Create JCell
+     * @param g
+     */
     public void createGUIboard(Graphics g){
         // x, y = real coordinates from the panel
         int x = unitSize;
@@ -62,9 +63,6 @@ public class JBoard extends JPanel {
             }
             x = x + unitSize;
         }
-    }
-    public void movedFromTo(Cell from, Cell to){
-
     }
 
 }

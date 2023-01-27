@@ -1,9 +1,7 @@
 package GameElements;
 
-import GUI.GameFrame;
-import Minimax.AlphaBeta;
-import Minimax.GameTree;
-import Minimax.Tree;
+import AlphaBeta.AlphaBeta;
+import AlphaBeta.GameTree;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,26 +14,9 @@ public class AIPlayer extends Player{
         super(PlayerType.AI, color);
     }
 
-
-
-    public void simulateMoves(ArrayList<Move> moves){
-        this.tree = new GameTree(this.board.gameState);
-
-        for(Move move: moves){
-            GameState newState = new GameState(this, this.board);
-            newState.current.notifySelectPiece(newState.getBoard().getCell(move.piece.getPosition()).getOccupyingPiece());
-            newState.current.notifySelectedCell(newState.getBoard().getCell(move.cell));
-
-            tree.root.addChild(newState);
-            EvaluationFunction.evaluateState(newState, newState.current);
-            new GameFrame(newState.getBoard(), "Move:" + move.piece.getPosition().getID() + " to " + move.cell.getID() +" value=" + newState.getValue());
-
-        }
-    }
-
     public void simulation(){
         this.tree = new GameTree(this.board.gameState);
-        simulateGame(2, this.tree.root);
+        simulateGame(3, this.tree.root);
         AlphaBeta.alphaBetaFailHard(this.tree.root, 2,
                 (int) Double.NEGATIVE_INFINITY,  (int) Double.POSITIVE_INFINITY, this.getPlayerIndex());
 
@@ -109,11 +90,6 @@ public class AIPlayer extends Player{
     @Override
     public void makeMove() {
         super.makeMove();
-        ArrayList<Move> moves = getMoves();
-
-        if(moves.size()==0){
-
-        }
         simulation();
     }
 }

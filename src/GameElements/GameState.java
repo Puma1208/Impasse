@@ -1,8 +1,5 @@
 package GameElements;
 
-import Minimax.GameTree;
-import Minimax.Node;
-
 import java.util.ArrayList;
 
 public class GameState {
@@ -123,7 +120,7 @@ public class GameState {
         this.crowning = crowning;
     }
 
-//    public void setImpasse(){
-//        this.impasse =
-//    }
+    public void setImpasse(Checker checker){
+        this.impasse = checker;
+    }
 }

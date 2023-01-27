@@ -1,8 +1,6 @@
-package Minimax;
+package AlphaBeta;
 
 import GameElements.GameState;
-
-import java.awt.font.GlyphMetrics;
 
 public class AlphaBeta {
 

@@ -105,8 +105,6 @@ public class JCell extends JPanel implements MouseListener {
     public int getUnitSize(){
         return this.size;
     }
-    public void showCrown(){    this.crown=true;}
-    public void crownFinished(){ this.crown=false;}
 
 
     @Override

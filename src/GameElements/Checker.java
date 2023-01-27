@@ -89,7 +89,6 @@ public abstract class Checker implements Piece{
 
     /**
      * Must be called on a stack - error if called on a checker
-     * TODO check if better to return a null object or an empty array list
      * @return
      */
     @Override
