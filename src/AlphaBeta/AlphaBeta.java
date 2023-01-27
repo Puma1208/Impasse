@@ -55,8 +55,6 @@ public class AlphaBeta {
     }
 
 
-
-
     public static int AlphaBeta(Node current, int depth, int player, int alpha, int beta){
         if(current.isLeaf() || depth==0){   return current.getValue();  }
         else{

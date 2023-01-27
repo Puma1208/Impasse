@@ -20,7 +20,6 @@ public class Node {
 
     public void setParent(Node parent){
         this.parent = parent;
-        //parent.addChild(this);
     }
     public void addChildren(ArrayList<Node> children){
         for(Node child:children){

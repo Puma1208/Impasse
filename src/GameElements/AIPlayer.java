@@ -20,7 +20,7 @@ public class AIPlayer extends Player{
         AlphaBeta.alphaBetaFailHard(this.tree.root, 2,
                 (int) Double.NEGATIVE_INFINITY,  (int) Double.POSITIVE_INFINITY, this.getPlayerIndex());
 
-        double maxVal = 0;
+        double maxVal = (int) Double.NEGATIVE_INFINITY;
         Move toDo = null;
         GameState winning = null;
         for(GameState g: this.tree.root.getChildren()){
